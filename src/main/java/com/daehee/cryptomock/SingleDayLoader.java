@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +23,10 @@ public class SingleDayLoader implements CommandLineRunner {
     }
 
     @Override
+    // reload data every
+    //@Scheduled(fixedRate = 30)
     public void run(String[] args) throws IOException {
+        //this.repository.deleteAll();
 
         /*
          * File jsonFile = new ClassPathResource("SingleDay.json").getFile();

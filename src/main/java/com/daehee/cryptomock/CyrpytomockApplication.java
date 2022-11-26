@@ -19,4 +19,7 @@ public class CyrpytomockApplication {
  * TCP [::]:*<port used>* [::]:0 LISTENING *<pid>*
  * 
  * > taskkill /F /PID
+ * 
+ * curl http://localhost:8080/api/singleDays
+ * 
  */
