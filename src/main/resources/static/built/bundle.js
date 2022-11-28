@@ -33900,7 +33900,11 @@ var SingleDay = /*#__PURE__*/function (_React$Component3) {
   _createClass(SingleDay, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, this.props.singleDay.symbol), /*#__PURE__*/React.createElement("td", null, this.props.singleDay.priceChangePercent), /*#__PURE__*/React.createElement("td", null, this.props.singleDay.lastPrice), /*#__PURE__*/React.createElement("td", null, this.props.singleDay.volume));
+      return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, this.props.singleDay.symbol), /*#__PURE__*/React.createElement("td", null, this.props.singleDay.priceChangePercent), /*#__PURE__*/React.createElement("td", null, this.props.singleDay.lastPrice), /*#__PURE__*/React.createElement("td", null, this.props.singleDay.volume), /*#__PURE__*/React.createElement("button", {
+        onClick: console.log('You clicked submit.')
+      }, "Buy"), /*#__PURE__*/React.createElement("button", {
+        onClick: console.log('You clicked submit.')
+      }, "sell"));
     }
   }]);
   return SingleDay;

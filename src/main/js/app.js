@@ -69,6 +69,12 @@ class SingleDay extends React.Component{
 				<td>{this.props.singleDay.priceChangePercent}</td>
 				<td>{this.props.singleDay.lastPrice}</td>
 				<td>{this.props.singleDay.volume}</td>
+				<button onClick={console.log('You clicked submit.')}>
+					Buy
+				</button>
+				<button onClick={console.log('You clicked submit.')}>
+					sell
+				</button>
 			</tr>
 		)
 	}
