@@ -24,9 +24,9 @@ public class SingleDayLoader implements CommandLineRunner {
 
     @Override
     // reload data every
-    //@Scheduled(fixedRate = 30)
+    // @Scheduled(fixedRate = 30)
     public void run(String[] args) throws IOException {
-        //this.repository.deleteAll();
+        // this.repository.deleteAll();
 
         /*
          * File jsonFile = new ClassPathResource("SingleDay.json").getFile();
@@ -41,7 +41,9 @@ public class SingleDayLoader implements CommandLineRunner {
                 SingleDay[].class);
 
         for (SingleDay singleDay2 : singleDay) {
-            this.repository.save(singleDay2);
+            for (int i = 0; i < 11; i++) {
+                this.repository.save(singleDay2);
+            }
         }
     }
 }

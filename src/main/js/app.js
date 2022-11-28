@@ -3,6 +3,7 @@
 // tag::vars[]
 const React = require('react'); // <1>
 const ReactDOM = require('react-dom'); // <2>
+const template = require('rest/interceptor/template');
 const client = require('./client'); // <3>
 // end::vars[]
 
@@ -22,7 +23,7 @@ class App extends React.Component { // <1>
 
 	render() { // <3>
 		return (
-			<SingleDaysList singleDays={this.state.singleDays}/>
+			<SingleDaysList singleDays={this.state.singleDays} />
 		)
 	}
 }
@@ -31,9 +32,18 @@ class App extends React.Component { // <1>
 
 class SingleDaysList extends React.Component{
 	render() {
+		
 		const singleDays = this.props.singleDays.map(singleDay =>
 			<SingleDay key={singleDay._links.self.href} singleDay={singleDay}/>
 		);
+		
+		/*
+		const singleDays = [];
+		for (let i = 0; i < 11; i++) {
+			temp = this.props.singleDays[i]
+			singleDays.push(<SingleDay key={temp._links.self.href} singleDay={temp}/>)
+		}*/
+		const temp = singleDays.slice(0,10)
 		return (
 			<table>
 				<tbody>
@@ -43,7 +53,7 @@ class SingleDaysList extends React.Component{
 						<th>lastPrice</th>
 						<th>volume</th>
 					</tr>
-					{singleDays}
+					{temp}
 				</tbody>
 			</table>
 		)
