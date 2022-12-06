@@ -8,7 +8,7 @@ const client = require('./client'); // <3>
 // end::vars[]
 
 // tag::app[]
-class App extends React.Component { // <1>
+class SingleDayTable extends React.Component { // <1>
 
 	constructor(props) {
 		super(props);
@@ -33,17 +33,18 @@ class App extends React.Component { // <1>
 class SingleDaysList extends React.Component{
 	render() {
 		
-		const singleDays = this.props.singleDays.map(singleDay =>
-			<SingleDay key={singleDay._links.self.href} singleDay={singleDay}/>
+		const temps = this.props.singleDays.filter(singleDay =>
+			singleDay.symbol.includes("USDT") == false
 		);
 		
-		/*
-		const singleDays = [];
-		for (let i = 0; i < 11; i++) {
-			temp = this.props.singleDays[i]
-			singleDays.push(<SingleDay key={temp._links.self.href} singleDay={temp}/>)
-		}*/
-		const temp = singleDays.slice(0,10)
+		const singleDays = temps.map(singleDay =>
+			<SingleDay key={singleDay._links.self.href} singleDay={singleDay}/>
+		);
+
+		
+		var temp = singleDays.slice(0,50);
+
+
 		return (
 			<table>
 				<tbody>
@@ -52,6 +53,7 @@ class SingleDaysList extends React.Component{
 						<th>priceChangePercent</th>
 						<th>lastPrice</th>
 						<th>volume</th>
+						<th>action</th>
 					</tr>
 					{temp}
 				</tbody>
@@ -69,12 +71,7 @@ class SingleDay extends React.Component{
 				<td>{this.props.singleDay.priceChangePercent}</td>
 				<td>{this.props.singleDay.lastPrice}</td>
 				<td>{this.props.singleDay.volume}</td>
-				<button onClick={console.log('You clicked submit.')}>
-					Buy
-				</button>
-				<button onClick={console.log('You clicked submit.')}>
-					sell
-				</button>
+				<td><button onClick={console.log('You clicked submit.')}> Trade </button></td>
 			</tr>
 		)
 	}
@@ -83,7 +80,7 @@ class SingleDay extends React.Component{
 
 
 ReactDOM.render(
-	<App />,
-	document.getElementById('react')
+	<SingleDayTable />,
+	document.getElementById('singleday')
 )
 

@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+
 public class CyrpytomockApplication {
 
     public static void main(String[] args) {
@@ -21,5 +22,6 @@ public class CyrpytomockApplication {
  * > taskkill /F /PID
  * 
  * curl http://localhost:8080/api/singleDays
+ *  ./mvnw spring-boot:run
  * 
  */

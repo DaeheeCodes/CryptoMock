@@ -1,13 +1,13 @@
-package com.daehee.cryptomock;
+package com.daehee.cryptomock.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import com.daehee.cryptomock.model.SingleDay;
+import com.daehee.cryptomock.repo.SingleDayRepo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,9 +41,7 @@ public class SingleDayLoader implements CommandLineRunner {
                 SingleDay[].class);
 
         for (SingleDay singleDay2 : singleDay) {
-            for (int i = 0; i < 11; i++) {
-                this.repository.save(singleDay2);
-            }
+            this.repository.save(singleDay2);
         }
     }
 }

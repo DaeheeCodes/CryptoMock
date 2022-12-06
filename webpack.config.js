@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    entry: './src/main/js/app.js',
+    entry: [ './src/main/js/singleDayTable.js', './src/main/js/userData.js' ],
     devtool: 'source-map',
     cache: true,
     mode: 'development',

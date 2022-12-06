@@ -1,4 +1,4 @@
-package com.daehee.cryptomock;
+package com.daehee.cryptomock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
