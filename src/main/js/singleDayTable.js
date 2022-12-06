@@ -1,5 +1,6 @@
 'use strict';
 
+
 // tag::vars[]
 const React = require('react'); // <1>
 const ReactDOM = require('react-dom'); // <2>
@@ -31,33 +32,63 @@ class SingleDayTable extends React.Component { // <1>
 
 
 class SingleDaysList extends React.Component{
+
+	constructor(props) {
+		super(props);
+		this.state = {searchInput : ''};
+	  }
+
+	onInputChange (event) {
+		event.preventDefault();
+        this.setState({searchInput: event.target.value})
+		if (searchInput.length > 0) {
+			temps.filter(x =>
+				x.symbol.includes(searchInput))
+		};
+    };
+
+
 	render() {
-		
-		const temps = this.props.singleDays.filter(singleDay =>
+
+		var temps = this.props.singleDays.filter(singleDay =>
 			singleDay.symbol.includes("USDT") == false
-		);
-		
-		const singleDays = temps.map(singleDay =>
-			<SingleDay key={singleDay._links.self.href} singleDay={singleDay}/>
 		);
 
 		
+
+		const singleDays = temps.map(singleDay =>
+			<SingleDay key={singleDay._links.self.href} singleDay={singleDay}/>
+		);
+	
+
 		var temp = singleDays.slice(0,50);
 
 
 		return (
-			<table>
-				<tbody>
-					<tr>
-						<th>symbol</th>
-						<th>priceChangePercent</th>
-						<th>lastPrice</th>
-						<th>volume</th>
-						<th>action</th>
-					</tr>
-					{temp}
-				</tbody>
-			</table>
+			
+			<div>
+                    <div>
+                        <label>Global Search</label>
+                        <input 
+                            type="text" 
+							placeholder="Search here"
+                            defaultValue={this.state.searchInput} 
+                            onChange={this.onInputChange}
+                        />
+                    </div>
+				<table>
+					<tbody>
+						<tr>
+							<th>symbol</th>
+							<th>priceChangePercent</th>
+							<th>lastPrice</th>
+							<th>volume</th>
+							<th>action</th>
+						</tr>
+						{temp}
+					</tbody>
+				</table>
+				</div>
 		)
 	}
 }
@@ -76,10 +107,37 @@ class SingleDay extends React.Component{
 		)
 	}
 }
+/*
+class SearchSingleDay extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state =  {searchInput : ""};
+	}
+	render() {
 
 
+		const handleChange = (e) => {
+			e.preventDefault();
+			setSearchInput(e.target.value);
+		  };
+		  
+		  if (searchInput.length > 0) {
+			  temps.filter((x) => {
+			  return x.symbol.includes(searchInput);
+		  });
+		  }
+
+	<input
+	type="search"
+	placeholder="Search here"
+	onChange={handleChange}
+	value={this.state.searchInput} />
+	}
+}
+*/
 
 ReactDOM.render(
+	//<SearchSingleDay />,
 	<SingleDayTable />,
 	document.getElementById('singleday')
 )

@@ -8,7 +8,7 @@ const client = require('./client'); // <3>
 // end::vars[]
 
 // tag::app[]
-class App extends React.Component { // <1>
+class UserProfile extends React.Component { // <1>
 
 	constructor(props) {
 		super(props);
@@ -77,6 +77,6 @@ class UserData extends React.Component{
 
 
 ReactDOM.render(
-	<App />,
+	<UserProfile />,
 	document.getElementById('userdata')
 )

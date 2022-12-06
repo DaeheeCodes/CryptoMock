@@ -34174,11 +34174,30 @@ var SingleDayTable = /*#__PURE__*/function (_React$Component) {
 var SingleDaysList = /*#__PURE__*/function (_React$Component2) {
   _inherits(SingleDaysList, _React$Component2);
   var _super2 = _createSuper(SingleDaysList);
-  function SingleDaysList() {
+  function SingleDaysList(props) {
+    var _this3;
     _classCallCheck(this, SingleDaysList);
-    return _super2.apply(this, arguments);
+    _this3 = _super2.call(this, props);
+    _this3.state = {
+      searchInput: ''
+    };
+    return _this3;
   }
   _createClass(SingleDaysList, [{
+    key: "onInputChange",
+    value: function onInputChange(event) {
+      event.preventDefault();
+      this.setState({
+        searchInput: event.target.value
+      });
+      if (searchInput.length > 0) {
+        temps.filter(function (x) {
+          return x.symbol.includes(searchInput);
+        });
+      }
+      ;
+    }
+  }, {
     key: "render",
     value: function render() {
       var temps = this.props.singleDays.filter(function (singleDay) {
@@ -34191,7 +34210,12 @@ var SingleDaysList = /*#__PURE__*/function (_React$Component2) {
         });
       });
       var temp = singleDays.slice(0, 50);
-      return /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "symbol"), /*#__PURE__*/React.createElement("th", null, "priceChangePercent"), /*#__PURE__*/React.createElement("th", null, "lastPrice"), /*#__PURE__*/React.createElement("th", null, "volume"), /*#__PURE__*/React.createElement("th", null, "action")), temp));
+      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", null, "Global Search"), /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        placeholder: "Search here",
+        defaultValue: this.state.searchInput,
+        onChange: this.onInputChange
+      })), /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "symbol"), /*#__PURE__*/React.createElement("th", null, "priceChangePercent"), /*#__PURE__*/React.createElement("th", null, "lastPrice"), /*#__PURE__*/React.createElement("th", null, "volume"), /*#__PURE__*/React.createElement("th", null, "action")), temp)));
     }
   }]);
   return SingleDaysList;
@@ -34213,7 +34237,38 @@ var SingleDay = /*#__PURE__*/function (_React$Component3) {
   }]);
   return SingleDay;
 }(React.Component);
-ReactDOM.render( /*#__PURE__*/React.createElement(SingleDayTable, null), document.getElementById('singleday'));
+/*
+class SearchSingleDay extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state =  {searchInput : ""};
+	}
+	render() {
+
+
+		const handleChange = (e) => {
+			e.preventDefault();
+			setSearchInput(e.target.value);
+		  };
+		  
+		  if (searchInput.length > 0) {
+			  temps.filter((x) => {
+			  return x.symbol.includes(searchInput);
+		  });
+		  }
+
+	<input
+	type="search"
+	placeholder="Search here"
+	onChange={handleChange}
+	value={this.state.searchInput} />
+	}
+}
+*/
+ReactDOM.render(
+/*#__PURE__*/
+//<SearchSingleDay />,
+React.createElement(SingleDayTable, null), document.getElementById('singleday'));
 
 /***/ }),
 
@@ -34246,21 +34301,21 @@ var client = __webpack_require__(/*! ./client */ "./src/main/js/client.js"); // 
 // end::vars[]
 
 // tag::app[]
-var App = /*#__PURE__*/function (_React$Component) {
-  _inherits(App, _React$Component);
-  var _super = _createSuper(App);
+var UserProfile = /*#__PURE__*/function (_React$Component) {
+  _inherits(UserProfile, _React$Component);
+  var _super = _createSuper(UserProfile);
   // <1>
 
-  function App(props) {
+  function UserProfile(props) {
     var _this;
-    _classCallCheck(this, App);
+    _classCallCheck(this, UserProfile);
     _this = _super.call(this, props);
     _this.state = {
       userDatas: []
     };
     return _this;
   }
-  _createClass(App, [{
+  _createClass(UserProfile, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
@@ -34283,7 +34338,7 @@ var App = /*#__PURE__*/function (_React$Component) {
       });
     }
   }]);
-  return App;
+  return UserProfile;
 }(React.Component);
 var UserDataProfile = /*#__PURE__*/function (_React$Component2) {
   _inherits(UserDataProfile, _React$Component2);
@@ -34329,7 +34384,7 @@ var UserData = /*#__PURE__*/function (_React$Component3) {
   }]);
   return UserData;
 }(React.Component);
-ReactDOM.render( /*#__PURE__*/React.createElement(App, null), document.getElementById('userdata'));
+ReactDOM.render( /*#__PURE__*/React.createElement(UserProfile, null), document.getElementById('userdata'));
 
 /***/ }),
 
