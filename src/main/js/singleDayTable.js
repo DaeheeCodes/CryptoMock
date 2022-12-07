@@ -1,5 +1,5 @@
 'use strict';
-
+import MaterialTable from 'material-table';
 
 // tag::vars[]
 const React = require('react'); // <1>
@@ -9,6 +9,8 @@ const client = require('./client'); // <3>
 // end::vars[]
 
 // tag::app[]
+
+
 class SingleDayTable extends React.Component { // <1>
 
 	constructor(props) {
@@ -23,13 +25,48 @@ class SingleDayTable extends React.Component { // <1>
 	}
 
 	render() { // <3>
+
+		const columns = [
+			{ title: 'Symbol', field: 'symbol' },
+			{ title: 'Price Change', field: 'priceChangePercent' },
+			{ title: 'Last Price', field: 'lastPrice' },
+			{ title: 'Volume', field: 'volume' }
+		  ];
+
+		  
+		var temp = this.state.singleDays.filter(singleDay =>
+			singleDay.symbol.includes("USDT") == false
+		);
+
+		temp = temp.slice(0, 50);
+		const data = [];
+
+		for (let i = 0; i < temp.length; i++ ) {
+			data[i] = {"symbol" : temp[i].symbol,
+"priceChangePercent" : temp[i].priceChangePercent,
+"lastPrice" : temp[i].lastPrice,
+"volume" : temp[i].volume};
+
+}
+
+/*
+console.log(this.state.singleDays)
+console.log(this.props.singleDays)
+console.log(temp);
+console.log(temp.length)
+console.log(data.length);
+console.log(data);
+*/
 		return (
-			<SingleDaysList singleDays={this.state.singleDays} />
+			<div style={{ maxWidth: '100%' }}>
+			<MaterialTable columns={columns} data={data} title='Most Popular' />
+			</div>
+			//<SingleDaysList singleDays={this.state.singleDays} />
 		)
 	}
 }
 
-
+/*
 
 class SingleDaysList extends React.Component{
 
@@ -107,6 +144,8 @@ class SingleDay extends React.Component{
 		)
 	}
 }
+*/
+
 /*
 class SearchSingleDay extends React.Component {
 	constructor(props) {
@@ -114,8 +153,6 @@ class SearchSingleDay extends React.Component {
 		this.state =  {searchInput : ""};
 	}
 	render() {
-
-
 		const handleChange = (e) => {
 			e.preventDefault();
 			setSearchInput(e.target.value);
@@ -126,7 +163,6 @@ class SearchSingleDay extends React.Component {
 			  return x.symbol.includes(searchInput);
 		  });
 		  }
-
 	<input
 	type="search"
 	placeholder="Search here"
@@ -141,4 +177,3 @@ ReactDOM.render(
 	<SingleDayTable />,
 	document.getElementById('singleday')
 )
-
