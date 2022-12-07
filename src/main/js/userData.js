@@ -1,32 +1,40 @@
 'use strict';
 
-// tag::vars[]
-const React = require('react'); // <1>
-const ReactDOM = require('react-dom'); // <2>
-const template = require('rest/interceptor/template');
-const client = require('./client'); // <3>
-// end::vars[]
 
-// tag::app[]
-class UserProfile extends React.Component { // <1>
+const React = require('react');
+const ReactDOM = require('react-dom'); 
+const template = require('rest/interceptor/template');
+const client = require('./client'); 
+
+
+class UserProfile extends React.Component { 
 
 	constructor(props) {
 		super(props);
 		this.state = {userDatas: []};
 	}
+    
 
-	componentDidMount() { // <2>
+	componentDidMount() { 
 		client({method: 'GET', path: '/api/userDatas'}).done(response => {
 			this.setState({userDatas: response.entity._embedded.userDatas});
 		});
 	}
 
-	render() { // <3>
+	render() { 
 		return (
 			<UserDataProfile userDatas={this.state.userDatas} />
 		)
 	}
 }
+
+/**
+ * @todo history should be hash map of {date: { coin
+ *                                              strike price
+ *                                              volume
+ *                                              sell or buy  }}
+ * @todo Implement this function.
+ */
 
 
 
@@ -37,12 +45,6 @@ class UserDataProfile extends React.Component{
 			<UserData key={userData._links.self.href} userData={userData}/>
 		);
 		
-		/*
-		const singleDays = [];
-		for (let i = 0; i < 11; i++) {
-			temp = this.props.singleDays[i]
-			singleDays.push(<SingleDay key={temp._links.self.href} singleDay={temp}/>)
-		}*/
 		const temp = userDatas
 		return (
 			<table>
