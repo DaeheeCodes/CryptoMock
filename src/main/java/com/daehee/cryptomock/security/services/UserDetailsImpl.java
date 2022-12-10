@@ -1,4 +1,4 @@
-package com.bezkoder.spring.jwt.mongodb.security.services;
+package com.daehee.cryptomock.security.services;
 
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.bezkoder.spring.jwt.mongodb.models.User;
+import com.daehee.cryptomock.model.UserData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDetailsImpl implements UserDetails {
@@ -19,32 +19,45 @@ public class UserDetailsImpl implements UserDetails {
 
 	private String username;
 
+	private String name;
+
 	private String email;
 
 	@JsonIgnore
 	private String password;
 
+	private String history;
+
+	private String cash;
+
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(String id, String username, String email, String password,
+	public UserDetailsImpl(String id, String username, String name, String email, String password, String history,
+			String cash,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
+		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.history = history;
+		this.cash = cash;
 		this.authorities = authorities;
 	}
 
-	public static UserDetailsImpl build(User user) {
-		List<GrantedAuthority> authorities = user.getRoles().stream()
+	public static UserDetailsImpl build(UserData userData) {
+		List<GrantedAuthority> authorities = userData.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
 				.collect(Collectors.toList());
 
 		return new UserDetailsImpl(
-				user.getId(), 
-				user.getUsername(), 
-				user.getEmail(),
-				user.getPassword(), 
+				userData.getId(),
+				userData.getUsername(),
+				userData.getName(),
+				userData.getEmail(),
+				userData.getPassword(),
+				userData.getHistory(),
+				userData.getCash(),
 				authorities);
 	}
 
@@ -69,6 +82,18 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public String getUsername() {
 		return username;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getHistory() {
+		return history;
+	}
+
+	public String getCash() {
+		return cash;
 	}
 
 	@Override
