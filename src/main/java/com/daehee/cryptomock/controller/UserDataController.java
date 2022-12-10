@@ -65,7 +65,8 @@ public class UserDataController {
   public ResponseEntity<UserData> createTutorial(@RequestBody UserData userdata) {
     try {
       UserData _userdata = userDataRepo
-          .save(new UserData(userdata.getName(), userdata.getEmail(), userdata.getHistory(), userdata.getCash()));
+          .save(new UserData(userdata.getUsername(), userdata.getName(), userdata.getEmail(), userdata.getPassword(),
+              userdata.getHistory(), userdata.getCash()));
       return new ResponseEntity<>(_userdata, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
