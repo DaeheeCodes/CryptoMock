@@ -1,11 +1,11 @@
-package com.bezkoder.spring.jwt.mongodb.payload.response;
+package com.daehee.cryptomock.payload.response;
 
 public class MessageResponse {
 	private String message;
 
 	public MessageResponse(String message) {
-	    this.message = message;
-	  }
+		this.message = message;
+	}
 
 	public String getMessage() {
 		return message;

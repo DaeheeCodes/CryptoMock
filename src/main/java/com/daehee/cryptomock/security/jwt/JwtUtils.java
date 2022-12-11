@@ -19,7 +19,7 @@ public class JwtUtils {
 	@Value("${env.JWTSECRET}")
 	private String jwtSecret;
 
-	@Value("${env.86400000}")
+	@Value("${env.JWTEXPIRATION}")
 	private int jwtExpirationMs;
 
 	public String generateJwtToken(Authentication authentication) {

@@ -18,7 +18,9 @@ public interface UserDataRepo extends MongoRepository<UserData, String> {
 
     Optional<UserData> findByName(String name);
 
-    Boolean existsByName(String name);
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
 
     Optional<UserData> findByUsername(String username);
 

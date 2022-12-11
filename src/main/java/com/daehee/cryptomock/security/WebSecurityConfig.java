@@ -22,6 +22,7 @@ import com.daehee.cryptomock.security.jwt.AuthTokenFilter;
 import com.daehee.cryptomock.security.services.UserDetailsServiceImpl;
 
 @Configuration
+// @EnableWebSecurity
 @EnableGlobalMethodSecurity(
     // securedEnabled = true,
     // jsr250Enabled = true,
@@ -90,6 +91,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll()
         .requestMatchers("/api/test/**").permitAll()
+        .requestMatchers("/**").permitAll()
         .anyRequest().authenticated();
 
     http.authenticationProvider(authenticationProvider());

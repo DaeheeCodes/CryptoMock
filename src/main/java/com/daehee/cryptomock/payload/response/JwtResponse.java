@@ -1,4 +1,4 @@
-package com.bezkoder.spring.jwt.mongodb.payload.response;
+package com.daehee.cryptomock.payload.response;
 
 import java.util.List;
 
@@ -8,13 +8,45 @@ public class JwtResponse {
 	private String id;
 	private String username;
 	private String email;
+	private String name;
+	private String history;
+	private String cash;
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getHistory() {
+		return this.history;
+	}
+
+	public void setHistory(String history) {
+		this.history = history;
+	}
+
+	public String getCash() {
+		return this.cash;
+	}
+
+	public void setCash(String cash) {
+		this.cash = cash;
+	}
+
 	private List<String> roles;
 
-	public JwtResponse(String accessToken, String id, String username, String email, List<String> roles) {
+	public JwtResponse(String accessToken, String id, String username, String name, String email, String history,
+			String cash, List<String> roles) {
 		this.token = accessToken;
 		this.id = id;
 		this.username = username;
+		this.name = name;
 		this.email = email;
+		this.history = history;
+		this.cash = cash;
 		this.roles = roles;
 	}
 

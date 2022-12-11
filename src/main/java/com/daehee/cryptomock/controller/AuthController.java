@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +40,10 @@ public class AuthController {
 	AuthenticationManager authenticationManager;
 
 	@Autowired
-	UserRepository userRepository;
+	UserDataRepo userDataRepo;
 
 	@Autowired
-	RoleRepository roleRepository;
+	RoleRepo roleRepository;
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -68,28 +68,34 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt,
 				userDetails.getId(),
 				userDetails.getUsername(),
+				userDetails.getName(),
 				userDetails.getEmail(),
+				userDetails.getHistory(),
+				userDetails.getCash(),
 				roles));
 	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+		if (userDataRepo.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Username is already taken!"));
 		}
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+		if (userDataRepo.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getUsername(),
+		UserData userData = new UserData(signUpRequest.getUsername(),
+				signUpRequest.getName(),
 				signUpRequest.getEmail(),
-				encoder.encode(signUpRequest.getPassword()));
+				encoder.encode(signUpRequest.getPassword()),
+				signUpRequest.getHistory(),
+				signUpRequest.getCash());
 
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
@@ -121,8 +127,8 @@ public class AuthController {
 			});
 		}
 
-		user.setRoles(roles);
-		userRepository.save(user);
+		userData.setRoles(roles);
+		userDataRepo.save(userData);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
