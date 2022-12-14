@@ -60,10 +60,11 @@ label {
 }
 
 .card {
+  z-index: 1000;
   background-color: #f7f7f7;
   padding: 20px 25px 30px;
   margin: 0 auto 25px;
-  margin-top: 50px;
+  margin-top: 70%;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
@@ -80,4 +81,19 @@ label {
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
+}
+
+.userdata {
+  position: relative;
+  z-index: -1000;
+}
+
+.singleday {
+  position: relative;
+    z-index: -1000;
+}
+
+.popups {
+  position: relative;
+  z-index: 1000;
 }
