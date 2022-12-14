@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    entry: [ './src/main/js/singleDayTable.js', './src/main/js/userData.js' ],
+    entry: [ './src/main/js/singleDayTable.js', './src/main/js/userData.js', './src/main/js/navBar.js', './src/main/js/home.js' ],
     devtool: 'source-map',
     cache: true,
     mode: 'development',
@@ -20,7 +20,11 @@ module.exports = {
                         presets: ["@babel/preset-env", "@babel/preset-react"]
                     }
                 }]
-            }
+            },
+            {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
+        }
         ]
     }
 };

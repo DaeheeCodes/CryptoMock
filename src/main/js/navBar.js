@@ -1,6 +1,6 @@
+import React, { Component } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "resources\static\App.css";
 
 import AuthService from "./services/auth.service";
 
@@ -12,12 +12,10 @@ import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 
+// import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
 
-const React = require('react');
-const ReactDOM = require('react-dom'); 
-
-class NavBar extends React.Component {
+class NavBar extends Component {
   constructor(props) {
     super(props);
     this.logOut = this.logOut.bind(this);
@@ -127,6 +125,7 @@ class NavBar extends React.Component {
               </li>
             </div>
           )}
+          
         </nav>
 
         <div className="container mt-3">
@@ -148,7 +147,4 @@ class NavBar extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <NavBar />,
-	document.getElementById('navbar')
-)
+export default NavBar;
