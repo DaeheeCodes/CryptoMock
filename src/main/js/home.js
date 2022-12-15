@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import NavBar from "./navBar";
 
 const React = require('react');
-const container = document.getElementById("root");
+const container = document.getElementById("navbar");
 const root = createRoot(container);
 
 

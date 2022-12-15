@@ -36,6 +36,16 @@ const vusername = value => {
   }
 };
 
+const vname = value => {
+  if (value.length < 3 || value.length > 20) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        The name must be between 3 and 20 characters.
+      </div>
+    );
+  }
+};
+
 const vpassword = value => {
   if (value.length < 6 || value.length > 40) {
     return (
@@ -51,13 +61,19 @@ export default class Register extends Component {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeName = this.onChangeName.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeCash = this.onChangeCash.bind(this);
+  
 
     this.state = {
       username: "",
+      name: "",
       email: "",
       password: "",
+      history: "",
+      cash: "",
       successful: false,
       message: ""
     };
@@ -66,6 +82,18 @@ export default class Register extends Component {
   onChangeUsername(e) {
     this.setState({
       username: e.target.value
+    });
+  }
+
+  onChangeName(e) {
+    this.setState({
+      name: e.target.value
+    });
+  }
+
+  onChangeCash(e) {
+    this.setState({
+      cash: e.target.value
     });
   }
 
@@ -94,8 +122,11 @@ export default class Register extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.register(
         this.state.username,
+        this.state.name,
         this.state.email,
-        this.state.password
+        this.state.password,
+        this.state.history,
+        this.state.cash
       ).then(
         response => {
           this.setState({
@@ -151,6 +182,18 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
+                  <label htmlFor="name">Name</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="name"
+                    value={this.state.name}
+                    onChange={this.onChangeName}
+                    validations={[required, vname]}
+                  />
+                </div>
+
+                <div className="form-group">
                   <label htmlFor="email">Email</label>
                   <Input
                     type="text"
@@ -171,6 +214,17 @@ export default class Register extends Component {
                     value={this.state.password}
                     onChange={this.onChangePassword}
                     validations={[required, vpassword]}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="cash">Initial Cash</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="cash"
+                    value={this.state.cash}
+                    onChange={this.onChangeCash}
                   />
                 </div>
 
