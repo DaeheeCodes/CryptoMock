@@ -1,4 +1,5 @@
 'use strict';
+import AuthService from "../services/auth.service";
 
 
 const React = require('react');
@@ -11,14 +12,30 @@ class UserData extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {userDatas: []};
+		this.state = {userDatas: [],
+			redirect: null,
+			userReady: false,
+			currentUser: { username: "" }
+		};
 	}
     
-
 	componentDidMount() { 
-		client({method: 'GET', path: '/api/userDatas'}).done(response => {
-			this.setState({userDatas: response.entity._embedded.userDatas});
-		});
+		const currentUser = AuthService.getCurrentUser();
+
+
+		if (!currentUser) {
+		this.setState({ currentUser: currentUser, userReady: true })
+		}
+
+		(userReady) ? 
+		client({method: 'GET', path: '/api/userDatas/' + currentUser.id}).done(response => {
+			this.setState({userDatas: response});
+		}) : 
+		client({method: 'GET', path: '/api/userDatas/638b8d00d9cf3102d2dcc638'}).done(response => {
+			this.setState({userDatas: response});
+		})
+
+	
 	}
 
 	render() { 

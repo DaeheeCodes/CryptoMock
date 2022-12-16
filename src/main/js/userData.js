@@ -1,4 +1,5 @@
 'use strict';
+import AuthService from "./services/auth.service";
 
 
 const React = require('react');
@@ -11,19 +12,36 @@ class UserProfile extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {userDatas: []};
+		this.state = {userDatas: [],
+			redirect: null,
+			userReady: false,
+			currentUser: { username: "" }
+		};
 	}
     
 
 	componentDidMount() { 
-		client({method: 'GET', path: '/api/userDatas'}).done(response => {
-			this.setState({userDatas: response.entity._embedded.userDatas});
-		});
+		setInterval(() => {
+		const currentUser = AuthService.getCurrentUser();
+
+
+		if (currentUser) {
+		this.setState({ currentUser: currentUser, userReady: true })
+		}
+
+		(this.state.userReady) ? 
+		client({method: 'GET', path: '/api/userDatas/' + currentUser.id}).done(response => {
+			this.setState({userDatas: response.entity});
+		}) : 
+		client({method: 'GET', path: '/api/userDatas/638b8d00d9cf3102d2dcc638'}).done(response => {
+			this.setState({userDatas: response.entity});
+		})
+	}, 3000);
 	}
 
 	render() { 
 		return (
-			<UserDataProfile userDatas={this.state.userDatas} />
+			<UserDataProfile userData={this.state.userDatas} />
 		)
 	}
 }
@@ -41,11 +59,6 @@ class UserProfile extends React.Component {
 class UserDataProfile extends React.Component{
 	render() {
 		
-		const userDatas = this.props.userDatas.map(userData =>
-			<UserData key={userData._links.self.href} userData={userData}/>
-		);
-		
-		const temp = userDatas
 		return (
 			<table>
 				<tbody>
@@ -55,26 +68,18 @@ class UserDataProfile extends React.Component{
 						<th>history</th>
 						<th>cash</th>
 					</tr>
-					{temp}
+					<tr>
+				<td>{this.props.userData.name}</td>
+				<td>{this.props.userData.email}</td>
+				<td>{this.props.userData.history}</td>
+				<td>{this.props.userData.cash}</td>
+			</tr>
 				</tbody>
 			</table>
 		)
 	}
 }
 
-
-class UserData extends React.Component{
-	render() {
-		return (
-			<tr>
-				<td>{this.props.userData.name}</td>
-				<td>{this.props.userData.email}</td>
-				<td>{this.props.userData.history}</td>
-				<td>{this.props.userData.cash}</td>
-			</tr>
-		)
-	}
-}
 
 
 
