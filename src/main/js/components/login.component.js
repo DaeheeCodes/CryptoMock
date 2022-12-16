@@ -57,7 +57,7 @@ class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.router.navigate("/profile");
+          this.props.router.navigate("/home");
           window.location.reload();
         },
         error => {
@@ -131,6 +131,7 @@ class Login extends Component {
                 )}
                 <span>Login</span>
               </button>
+              <button className="btn btn-primary btn-block" onClick={()=>this.props.router.navigate(-1)}>Cancel</button>
             </div>
 
             {this.state.message && (

@@ -5,6 +5,7 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
 import AuthService from "../services/auth.service";
+import { withRouter } from '../common/with-router';
 
 const required = value => {
   if (!value) {
@@ -56,7 +57,7 @@ const vpassword = value => {
   }
 };
 
-export default class Register extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
@@ -230,6 +231,7 @@ export default class Register extends Component {
 
                 <div className="form-group">
                   <button className="btn btn-primary btn-block">Sign Up</button>
+                  <button className="btn btn-primary btn-block" onClick={()=>this.props.router.navigate(-1)}>Cancel</button>
                 </div>
               </div>
             )}
@@ -260,3 +262,5 @@ export default class Register extends Component {
     );
   }
 }
+
+export default withRouter(Register);
