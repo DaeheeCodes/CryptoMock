@@ -85,7 +85,6 @@ class Login extends Component {
     return (
       <div className="col-md-12">
         <div className="card card-container">
-        <div onClick={() => this.props.history.goBack()}>GO BACK</div>
           <img
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
             alt="profile-img"
@@ -132,6 +131,7 @@ class Login extends Component {
                 )}
                 <span>Login</span>
               </button>
+              <button className="btn btn-primary btn-block" onClick={()=>this.props.router.navigate(-1)}>Cancel</button>
             </div>
 
             {this.state.message && (

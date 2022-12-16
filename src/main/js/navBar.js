@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Routes, Route, Link, withRouter } from "react-router-dom";
-
+import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import AuthService from "./services/auth.service";
@@ -148,4 +147,4 @@ class NavBar extends Component {
   }
 }
 
-export default withRouter(NavBar);
+export default NavBar;
