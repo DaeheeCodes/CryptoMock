@@ -2,6 +2,9 @@
 import AuthService from "./services/auth.service";
 import axios from 'axios';
 import authHeader from './services/auth-header';
+import UserChart from './components/userChart';
+import ParentSize from '@visx/responsive/lib/components/ParentSize';
+import { data } from './data/stats_for_Denmark';
 
 const React = require('react');
 const ReactDOM = require('react-dom'); 
@@ -44,7 +47,9 @@ class UserProfile extends React.Component {
 
 	render() { 
 		return (
-			<UserDataProfile userData={this.state.userDatas} />
+			<UserChart data={data} width={1000} height={500} />
+			//			<UserDataProfile userData={this.state.userDatas} />
+
 		)
 	}
 }
