@@ -1,15 +1,19 @@
 'use strict';
 import AuthService from "./services/auth.service";
-
+import axios from 'axios';
+import authHeader from './services/auth-header';
 
 const React = require('react');
 const ReactDOM = require('react-dom'); 
 const template = require('rest/interceptor/template');
 const client = require('./client'); 
 
+const API_URL = 'http://localhost:8080/api/userDatas/';
 
 class UserProfile extends React.Component { 
 
+
+	
 	constructor(props) {
 		super(props);
 		this.state = {userDatas: [],
@@ -30,13 +34,12 @@ class UserProfile extends React.Component {
 		}
 
 		(this.state.userReady) ? 
-		client({method: 'GET', path: '/api/userDatas/' + currentUser.id}).done(response => {
-			this.setState({userDatas: response.entity});
-		}) : 
-		client({method: 'GET', path: '/api/userDatas/638b8d00d9cf3102d2dcc638'}).done(response => {
-			this.setState({userDatas: response.entity});
-		})
+		axios.get(API_URL + currentUser.id, { headers: authHeader() }).then((response) => this.setState({userDatas: response.data}))
+		.catch((err) => console.log(err))  : 
+		axios.get(API_URL + "638b8d00d9cf3102d2dcc638", { headers: authHeader() }).then((response) => this.setState({userDatas: response.data}))
+		.catch((err) => console.log(err))
 	}, 3000);
+	
 	}
 
 	render() { 

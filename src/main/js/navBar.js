@@ -63,7 +63,7 @@ class NavBar extends Component {
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
-            bezKoder
+            Crypto Mock
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">

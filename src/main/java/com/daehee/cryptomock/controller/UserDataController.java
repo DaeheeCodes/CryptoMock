@@ -1,9 +1,18 @@
 package com.daehee.cryptomock.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +29,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daehee.cryptomock.model.UserData;
 import com.daehee.cryptomock.repo.UserDataRepo;
+import com.daehee.cryptomock.security.services.UserDetailsImpl;
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class UserDataController {
 
+  private static final Logger logger = LoggerFactory.getLogger(UserDataController.class);
+
   @Autowired
   UserDataRepo userDataRepo;
 
-  @GetMapping("/userdata")
-  public ResponseEntity<List<UserData>> getAllTutorials(@RequestParam(required = false) String email) {
+  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping("/userDatas")
+  public ResponseEntity<List<UserData>> getAllUserData(@RequestParam(required = false) String email) {
     try {
       List<UserData> userdata = new ArrayList<UserData>();
 
@@ -50,15 +63,34 @@ public class UserDataController {
     }
   }
 
-  @GetMapping("/userdata/{id}")
-  public ResponseEntity<UserData> getTutorialById(@PathVariable("id") String id) {
+  @GetMapping("/userDatas/{id}")
+  public ResponseEntity<UserData> getUserDataById(@PathVariable("id") String id, Authentication authentication) {
     Optional<UserData> userData = userDataRepo.findById(id);
+    Optional<UserData> temp = userDataRepo.findById("638b8d00d9cf3102d2dcc638");
 
-    if (userData.isPresent()) {
-      return new ResponseEntity<>(userData.get(), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    if (authentication != null) {
+
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+      logger.info(userDetails.getId());
+      String currentId = userDetails.getId();
+      if (Objects.equals(id, currentId)) {
+        if (userData.isPresent()) {
+          return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+      }
+    } else if ("638b8d00d9cf3102d2dcc638".equals(id)) {
+
+      if (temp.isPresent()) {
+        return new ResponseEntity<>(temp.get(), HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
     }
+
+    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
   }
 
   @PostMapping("/userdata")
@@ -108,21 +140,5 @@ public class UserDataController {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  /*
-   * @GetMapping("/tutorials/published")
-   * public ResponseEntity<List<UserData>> findByPublished() {
-   * try {
-   * List<UserData> tutorials = userDataRepo.findByPublished(true);
-   * 
-   * if (tutorials.isEmpty()) {
-   * return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-   * }
-   * return new ResponseEntity<>(tutorials, HttpStatus.OK);
-   * } catch (Exception e) {
-   * return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-   * }
-   * }
-   */
 
 }
