@@ -57,17 +57,22 @@ class SingleDayTable extends Component {
 
 
 	componentDidMount() {
-		setInterval(() => {
+
 			client({method: 'GET', path: '/api/singleDays'}).done(response => {
 				this.setState({singleDays: response.entity._embedded.singleDays});
 			});
-		  }, 5000);
+
 	}
 
 	
 
 	render() {	
 
+		setInterval(() => {
+			client({method: 'GET', path: '/api/singleDays'}).done(response => {
+				this.setState({singleDays: response.entity._embedded.singleDays});
+			});
+		  }, 5000);
 
 		const columns = [
 			{ title: 'Symbol', field: 'symbol' },

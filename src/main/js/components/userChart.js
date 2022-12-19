@@ -6,7 +6,7 @@ import { Line, LinePath } from "@visx/shape";
 import { extent, bisector } from 'd3-array';
 import { LinearGradient } from '@visx/gradient';
 import { GridRows, GridColumns } from '@visx/grid';
-import { useTooltip, TooltipWithBounds, defaultStyles } from '@visx/tooltip';
+import { useTooltip, TooltipWithBounds, defaultStyles, useTooltipInPortal } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
 import { GlyphCircle } from '@visx/glyph';
 import { curveNatural } from "@visx/curve";
@@ -35,7 +35,7 @@ function UserChart({ data, width, height }) {
         return el.type === "TOTAL"
     });
 
-    const series = [data1, data2]
+    const series = [data2]
 
     //colors for lines
     const colors = {
@@ -93,12 +93,9 @@ function UserChart({ data, width, height }) {
         const index = bisectDate(data, x0, 1);
         const d0 = data[index - 1];
         const d1 = data[index];
-        let d = d0;
+        let d = d1;
 
 
-        if (d1 && getDate(d1)) {
-            d = x0.valueOf() - getDate(d0).valueOf() > getDate(d1).valueOf() - x0.valueOf() ? d1 : d0;
-        }
         showTooltip({
             tooltipData: getD(d.year),
             tooltipLeft: x,
@@ -132,7 +129,7 @@ function UserChart({ data, width, height }) {
                         scale={timeScale}
                         stroke={'#EDF2F7'}
                         tickFormat={formatDate}
-        strokeWidth={1.5}
+        strokeWidth={0}
         tickStroke={colors.darkGray}
         tickLabelProps={() => ({
           fill: colors.gray,
@@ -148,8 +145,8 @@ function UserChart({ data, width, height }) {
 
                         <LinePath
                             data={data2}
-                            x={(d) => timeScale(getDate(d)) ?? 0}
-                            y={(d) => rdScale(getRD(d)) ?? 0}
+                            x={(d) => timeScale(getDate(d)) }
+                            y={(d) => rdScale(getRD(d)) }
                             fill="url('#background-gradient')"
         curve={curveNatural}
                             />
@@ -164,36 +161,21 @@ function UserChart({ data, width, height }) {
 
                         <LinePath
                             data={data2}
-                            x={(d) => timeScale(getDate(d)) ?? 0}
-                            y={(d) => rdScale(getRD(d)) ?? 0}
+                            x={(d) => timeScale(getDate(d)) }
+                            y={(d) => rdScale(getRD(d)) }
                             stroke="url('#line-gradient')"
         strokeWidth={3}
         curve={curveNatural}
         markerEnd="url(#marker-circle)"
                             />
-
-
-                    {tooltipData && (
-                        <g>
-                            <Line
-                                from={{ x: tooltipLeft - margin.left, y: 0 }}
-                                to={{ x: tooltipLeft - margin.left, y: innerHeight }}
-                                stroke={'#EDF2F7'}
-                                strokeWidth={2}
-                                pointerEvents="none"
-                                strokeDasharray="4,2"
-                            />
-                        </g>
-                    )}
-                    {tooltipData && tooltipData.map((d, i) => (<g>
+                      {tooltipData ?(
                         <GlyphCircle 
                             left={tooltipLeft - margin.left}
-                            top={rdScale(d.amount) + 2}
+                            top={tooltipTop + 2}
                             size={110}
-                            fill={colors[i]}
+                            fill={colors.accent}
                             stroke={'white'}
-                            strokeWidth={2} />
-                    </g>))}
+                            strokeWidth={2} /> ) : null}
                     <rect x={0} y={0} width={innerWidth} height={innerHeight} onTouchStart={handleTooltip} fill={'transparent'}
                         onTouchMove={handleTooltip}
                         onMouseMove={handleTooltip}
@@ -209,7 +191,6 @@ function UserChart({ data, width, height }) {
                     style={tooltipStyles}
                 > 
                 <p>{`Total Spend: $${getRD(tooltipData[1])}`}</p>
-                <p>{`Renewable Spend: $${getRD(tooltipData[0])}`}</p>
                 <p>{`Year: ${getDate(tooltipData[1])}`}</p>
                 </TooltipWithBounds>
             ) : null}

@@ -47,9 +47,13 @@ class UserProfile extends React.Component {
 
 	render() { 
 		return (
-			<UserChart data={data} width={1000} height={500} />
-			//			<UserDataProfile userData={this.state.userDatas} />
+			<>
 
+        <h2>
+			<b>{this.state.userReady ? this.state.currentUser.name : 'My'}</b> Standing
+        </h2>
+			<UserChart data={data} width={1000} height={500} />
+			</>
 		)
 	}
 }
@@ -63,7 +67,7 @@ class UserProfile extends React.Component {
  */
 
 
-
+/*
 class UserDataProfile extends React.Component{
 	render() {
 		
@@ -87,7 +91,7 @@ class UserDataProfile extends React.Component{
 		)
 	}
 }
-
+*/
 
 
 
