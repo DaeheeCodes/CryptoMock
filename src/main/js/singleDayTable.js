@@ -54,8 +54,6 @@ class SingleDayTable extends React.Component {
 		this.state = {singleDays: []};
 	}
 
-
-
 	componentDidMount() {
 		setInterval(() => {
 			client({method: 'GET', path: '/api/singleDays'}).done(response => {
@@ -64,11 +62,7 @@ class SingleDayTable extends React.Component {
 		  }, 5000);
 	}
 
-	
-
 	render() {	
-
-
 		const columns = [
 			{ title: 'Symbol', field: 'symbol' },
 			{ title: 'Last Price', field: 'lastPrice', type:'currency', currencySetting:{ currencyCode:'USD', minimumFractionDigits:0, maximumFractionDigits:2} },
@@ -76,12 +70,11 @@ class SingleDayTable extends React.Component {
 			{ title: 'Volume', field: 'volume' }
 		  ];
 
-		  var filter = ["BTCUSD", "ETHUSD", "USDCUSD", "BNBUSD", "BUSDUSD", "DOGEUSD", "ADAUSD", "MATICUSD", "DAIUSD", "DOTUSD", "TRXUSD", "LTCUSD", "SHIBUSD", "SOLUSD", "XMRUSD"];
+		  var filter = ["BTCUSD", "ETHUSD", "USDCUSD", "BNBUSD", "BUSDUSD", "DOGEUSD", "ADAUSD", "MATICUSD", "DAIUSD", "DOTUSD", "TRXUSD", "LTCUSD", "SHIBUSD", "SOLUSD", "XMRUSD", "BCHUSD", "QNTUSD"];
 		var temp = this.state.singleDays.filter(singleDay =>
 			filter.includes(singleDay.symbol)
 		);
 
-		temp = temp.slice(0, 100);
 		const data = [];
 
 		for (let i = 0; i < temp.length; i++ ) {
@@ -92,119 +85,33 @@ class SingleDayTable extends React.Component {
 
 }
 
-/*
-console.log(this.state.singleDays)
-console.log(this.props.singleDays)
-console.log(temp);
-console.log(temp.length)
-console.log(data.length);
-console.log(data);
-*/
-
 		return (
+			<div className="lowercomponent">
+			<h1 className="headers">Trade</h1>
 			<div style={{ maxWidth: '100%' }}>
-			<MaterialTable  icons={tableIcons} columns={columns} data={data} title='Most Popular - Click on item to Trade' />
+			<MaterialTable  icons={tableIcons} columns={columns} data={data} onRowClick={(event, rowData, togglePanel) => {
+				togglePanel()
+				console.log(rowData);
+				event.stopPropagation;
+			}}  detailPanel={rowData => {
+				return (
+					<div
+					style={{
+					  fontSize: 100,
+					  textAlign: 'center',
+					  color: 'white',
+					  backgroundColor: '#43A047',
+					}}
+				  >
+					{rowData.symbol}
+				  </div> )
+			  }}
+			  title='Most Popular - Click on item to Trade' />
 			</div>
-			//<SingleDaysList singleDays={this.state.singleDays} />
+			</div>
 		)
 	}
 }
 
-/*
-class SingleDaysList extends React.Component{
-	constructor(props) {
-		super(props);
-		this.state = {searchInput : ''};
-	  }
-	onInputChange (event) {
-		event.preventDefault();
-        this.setState({searchInput: event.target.value})
-		if (searchInput.length > 0) {
-			temps.filter(x =>
-				x.symbol.includes(searchInput))
-		};
-    };
-	render() {
-		var temps = this.props.singleDays.filter(singleDay =>
-			singleDay.symbol.includes("USDT") == false
-		);
-		
-		const singleDays = temps.map(singleDay =>
-			<SingleDay key={singleDay._links.self.href} singleDay={singleDay}/>
-		);
-	
-		var temp = singleDays.slice(0,50);
-		return (
-			
-			<div>
-                    <div>
-                        <label>Global Search</label>
-                        <input 
-                            type="text" 
-							placeholder="Search here"
-                            defaultValue={this.state.searchInput} 
-                            onChange={this.onInputChange}
-                        />
-                    </div>
-				<table>
-					<tbody>
-						<tr>
-							<th>symbol</th>
-							<th>priceChangePercent</th>
-							<th>lastPrice</th>
-							<th>volume</th>
-							<th>action</th>
-						</tr>
-						{temp}
-					</tbody>
-				</table>
-				</div>
-		)
-	}
-}
-class SingleDay extends React.Component{
-	render() {
-		return (
-			<tr>
-				<td>{this.props.singleDay.symbol}</td>
-				<td>{this.props.singleDay.priceChangePercent}</td>
-				<td>{this.props.singleDay.lastPrice}</td>
-				<td>{this.props.singleDay.volume}</td>
-				<td><button onClick={console.log('You clicked submit.')}> Trade </button></td>
-			</tr>
-		)
-	}
-}
-*/
 
-/*
-class SearchSingleDay extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state =  {searchInput : ""};
-	}
-	render() {
-		const handleChange = (e) => {
-			e.preventDefault();
-			setSearchInput(e.target.value);
-		  };
-		  
-		  if (searchInput.length > 0) {
-			  temps.filter((x) => {
-			  return x.symbol.includes(searchInput);
-		  });
-		  }
-	<input
-	type="search"
-	placeholder="Search here"
-	onChange={handleChange}
-	value={this.state.searchInput} />
-	}
-}
-*/
-
-ReactDOM.render(
-	//<SearchSingleDay />,
-	<SingleDayTable />,
-	document.getElementById('singleday')
-)
+export default SingleDayTable

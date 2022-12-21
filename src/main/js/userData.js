@@ -13,10 +13,8 @@ const client = require('./client');
 
 const API_URL = 'http://localhost:8080/api/userDatas/';
 
-class UserProfile extends React.Component { 
+class UserData extends React.Component { 
 
-
-	
 	constructor(props) {
 		super(props);
 		this.state = {userDatas: [],
@@ -36,6 +34,7 @@ class UserProfile extends React.Component {
 		this.setState({ currentUser: currentUser, userReady: true })
 		}
 
+		// Show mine if not logged in, show user's if they are.
 		(this.state.userReady) ? 
 		axios.get(API_URL + currentUser.id, { headers: authHeader() }).then((response) => this.setState({userDatas: response.data}))
 		.catch((err) => console.log(err))  : 
@@ -50,52 +49,12 @@ class UserProfile extends React.Component {
 		
 
 		return (
-			<>
-
+			<div className="lowercomponent">
+			<h1 className="headers">My standing</h1>
 			<UserChart data={data} width={800} height={400}/>
-			</>
+			</div>
 		)
 	}
 }
 
-/**
- * @todo history should be hash map of {date: { coin
- *                                              strike price
- *                                              volume
- *                                              sell or buy  }}
- * @todo Implement this function.
- */
-
-
-/*
-class UserDataProfile extends React.Component{
-	render() {
-		
-		return (
-			<table>
-				<tbody>
-					<tr>
-						<th>name</th>
-						<th>email</th>
-						<th>history</th>
-						<th>cash</th>
-					</tr>
-					<tr>
-				<td>{this.props.userData.name}</td>
-				<td>{this.props.userData.email}</td>
-				<td>{this.props.userData.history}</td>
-				<td>{this.props.userData.cash}</td>
-			</tr>
-				</tbody>
-			</table>
-		)
-	}
-}
-*/
-
-
-
-ReactDOM.render(
-	<UserProfile />,
-	document.getElementById('userdata')
-)
+export default UserData

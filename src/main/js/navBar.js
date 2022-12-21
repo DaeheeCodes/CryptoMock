@@ -61,7 +61,7 @@ class NavBar extends Component {
 
     return (
       <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <nav className="navbar navbar-expand navbar-dark bg-dark popup">
           <Link to={"/"} className="navbar-brand">
             Crypto Mock
           </Link>

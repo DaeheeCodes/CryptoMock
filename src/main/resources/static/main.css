@@ -10,7 +10,7 @@ body {
 }
 .container {
   position: absolute;
-  top: 50%;
+  top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -83,17 +83,7 @@ label {
   border-radius: 50%;
 }
 
-.userdata {
-  position: relative;
-  z-index: -1000;
-}
-
-.singleday {
-  position: relative;
-    z-index: -1000;
-}
-
-.popups {
+.popup {
   position: relative;
   z-index: 1000;
 }
@@ -101,4 +91,9 @@ label {
 .headers {
   margin-left: 1.5%;
   margin-top: 1.5%;
+}
+
+.lowercomponent {
+  position: relative;
+    z-index: -1000;
 }
