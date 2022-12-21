@@ -85,7 +85,7 @@ label {
 
 .popup {
   position: relative;
-  z-index: 1000;
+  z-index: 2;
 }
 
 .headers {
@@ -95,5 +95,5 @@ label {
 
 .lowercomponent {
   position: relative;
-    z-index: -1000;
+    z-index: 1;
 }

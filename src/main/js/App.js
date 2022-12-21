@@ -17,8 +17,8 @@ root.render(
     <div>
   <BrowserRouter>
     <NavBar />
-    <UserData />
-          <SingleDayTable />
   </BrowserRouter>
-          </div>
+  <UserData />
+<SingleDayTable />
+    </div>
 )

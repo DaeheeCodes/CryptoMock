@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState  } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -24,6 +24,7 @@ class NavBar extends Component {
       showModeratorBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
+      showPopUp: "",
     };
   }
 
@@ -60,8 +61,8 @@ class NavBar extends Component {
     const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
     return (
-      <div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark popup">
+      <div className ={this.state.showPopUp}>
+        <nav className={"navbar navbar-expand navbar-dark bg-dark" }>
           <Link to={"/"} className="navbar-brand">
             Crypto Mock
           </Link>
@@ -113,13 +114,13 @@ class NavBar extends Component {
           ) : (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
+                <Link to={"/login"} className="nav-link" onClick={this.setState({showPopUp: "popup"})}>
                   Login
                 </Link>
               </li>
 
               <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
+                <Link to={"/register"} className="nav-link" onClick={this.setState({showPopUp: "popup"})}>
                   Sign Up
                 </Link>
               </li>
