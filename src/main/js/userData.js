@@ -46,13 +46,13 @@ class UserProfile extends React.Component {
 	}
 
 	render() { 
+
+		
+
 		return (
 			<>
 
-        <h2>
-			<b>{this.state.userReady ? this.state.currentUser.name : 'My'}</b> Standing
-        </h2>
-			<UserChart data={data} width={1000} height={500} />
+			<UserChart data={data} width={800} height={400}/>
 			</>
 		)
 	}

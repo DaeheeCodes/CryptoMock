@@ -76,12 +76,12 @@ class SingleDayTable extends React.Component {
 			{ title: 'Volume', field: 'volume' }
 		  ];
 
-		  
+		  var filter = ["BTCUSD", "ETHUSD", "USDCUSD", "BNBUSD", "BUSDUSD", "DOGEUSD", "ADAUSD", "MATICUSD", "DAIUSD", "DOTUSD", "TRXUSD", "LTCUSD", "SHIBUSD", "SOLUSD", "XMRUSD"];
 		var temp = this.state.singleDays.filter(singleDay =>
-			singleDay.symbol.includes("USDT") == false
+			filter.includes(singleDay.symbol)
 		);
 
-		temp = temp.slice(0, 50);
+		temp = temp.slice(0, 100);
 		const data = [];
 
 		for (let i = 0; i < temp.length; i++ ) {
@@ -111,14 +111,11 @@ console.log(data);
 }
 
 /*
-
 class SingleDaysList extends React.Component{
-
 	constructor(props) {
 		super(props);
 		this.state = {searchInput : ''};
 	  }
-
 	onInputChange (event) {
 		event.preventDefault();
         this.setState({searchInput: event.target.value})
@@ -127,24 +124,16 @@ class SingleDaysList extends React.Component{
 				x.symbol.includes(searchInput))
 		};
     };
-
-
 	render() {
-
 		var temps = this.props.singleDays.filter(singleDay =>
 			singleDay.symbol.includes("USDT") == false
 		);
-
 		
-
 		const singleDays = temps.map(singleDay =>
 			<SingleDay key={singleDay._links.self.href} singleDay={singleDay}/>
 		);
 	
-
 		var temp = singleDays.slice(0,50);
-
-
 		return (
 			
 			<div>
@@ -173,8 +162,6 @@ class SingleDaysList extends React.Component{
 		)
 	}
 }
-
-
 class SingleDay extends React.Component{
 	render() {
 		return (

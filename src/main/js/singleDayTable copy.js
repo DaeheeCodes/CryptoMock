@@ -42,12 +42,12 @@ const tableIcons = {
 const React = require('react');
 const ReactDOM = require('react-dom');
 const template = require('rest/interceptor/template');
-const client = require('../client');
+const client = require('./client');
 
 
 
 
-class SingleDayTable extends Component {
+class SingleDayTable extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -57,22 +57,17 @@ class SingleDayTable extends Component {
 
 
 	componentDidMount() {
-
+		setInterval(() => {
 			client({method: 'GET', path: '/api/singleDays'}).done(response => {
 				this.setState({singleDays: response.entity._embedded.singleDays});
 			});
-
+		  }, 5000);
 	}
 
 	
 
 	render() {	
 
-		setInterval(() => {
-			client({method: 'GET', path: '/api/singleDays'}).done(response => {
-				this.setState({singleDays: response.entity._embedded.singleDays});
-			});
-		  }, 5000);
 
 		const columns = [
 			{ title: 'Symbol', field: 'symbol' },
@@ -82,20 +77,27 @@ class SingleDayTable extends Component {
 		  ];
 
 		  
-		var temp = this.state.singleDays.filter(singleDay =>
-			singleDay.symbol.includes("USDT") == false
-		);
+		  var temps = this.state.singleDays;
+		  var temp = temps.slice(0,100);
+		  /*
+		  temp = temp.filter(singleDay =>
+			  //tighter filter for quality control.
+			  singleDay.symbol === "BTCUSD" || "ETHUSD" || "USDCUSD" || "BNBUSD" || "BUSDUSD" || "XRPUSD" || "DOGEUSD" || "ADAUSD" || "MATICUSD" || "DAIUSD" || "DOTUSD" || "TRXUSD" || "LTCUSD" || "SHIBUSD" || "SOLUSD" || "XMRUSD"
+		  );
+		  */
+		  const datas = [];
+		  
+		  
+		  for (let i = 0; i < temp.length; i++ ) {
+			  if (temp[i].symbol == "BTCUSD" || "ETHUSD" || "USDCUSD" || "BNBUSD" || "BUSDUSD" || "XRPUSD" || "DOGEUSD" || "ADAUSD" || "MATICUSD" || "DAIUSD" || "DOTUSD" || "TRXUSD" || "LTCUSD" || "SHIBUSD" || "SOLUSD" || "XMRUSD" ) {
+			  datas[i] = {"symbol" : temp[i].symbol.slice(0,3),
+		  "priceChangePercent" : temp[i].priceChangePercent,
+		  "lastPrice" : temp[i].lastPrice,
+		  "volume" : temp[i].volume};
+			  //hashSet.add(temp[i].symbol.slice(0,3));
+		  }
+		}
 
-		temp = temp.slice(0, 25);
-		const data = [];
-
-		for (let i = 0; i < temp.length; i++ ) {
-			data[i] = {"symbol" : temp[i].symbol.slice(0,3),
-"priceChangePercent" : temp[i].priceChangePercent,
-"lastPrice" : temp[i].lastPrice,
-"volume" : temp[i].volume};
-
-}
 
 /*
 console.log(this.state.singleDays)
@@ -108,7 +110,7 @@ console.log(data);
 
 		return (
 			<div style={{ maxWidth: '100%' }}>
-			<MaterialTable  icons={tableIcons} columns={columns} data={data} title='Most Popular - Click on item to Trade' />
+			<MaterialTable  icons={tableIcons} columns={columns} data={datas} title='Most Popular - Click on item to Trade' />
 			</div>
 			//<SingleDaysList singleDays={this.state.singleDays} />
 		)
@@ -221,4 +223,8 @@ class SearchSingleDay extends React.Component {
 }
 */
 
-export default SingleDayTable
+ReactDOM.render(
+	//<SearchSingleDay />,
+	<SingleDayTable />,
+	document.getElementById('singleday')
+)
