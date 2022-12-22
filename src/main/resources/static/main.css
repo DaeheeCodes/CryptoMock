@@ -97,3 +97,8 @@ label {
   position: relative;
     z-index: 1;
 }
+
+.rowA {
+  display:flex; 
+  flex-direction:row;
+}

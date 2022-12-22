@@ -17,6 +17,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import CryptoDetails from './components/cryptoDetails';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -44,30 +47,48 @@ const ReactDOM = require('react-dom');
 const template = require('rest/interceptor/template');
 const client = require('./client');
 
-
-
-
 class SingleDayTable extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {singleDays: []};
+		this.state = {singleDays: [], bufferOn: true, openPopup: false, setOpenPopup: false, popUpData: []};
 	}
 
+	openInPopup () {
+		this.setState({setOpenPopup: true});
+    }
+	
+	toggleBuffer() {
+			if (this.state.bufferOn)
+			{
+			this.setState ({
+					bufferOn: false
+				})
+			}
+				if (this.state.bufferOn == false)
+			{
+			this.setState ({
+					bufferOn: true
+				})}
+				console.log(this.state.bufferOn)
+			};
 
-
+				
 	componentDidMount() {
-		setInterval(() => {
 			client({method: 'GET', path: '/api/singleDays'}).done(response => {
 				this.setState({singleDays: response.entity._embedded.singleDays});
 			});
-		  }, 5000);
 	}
-
-	
 
 	render() {	
 
+		setInterval(() => {
+			if(this.state.bufferOn) {
+			client({method: 'GET', path: '/api/singleDays'}).done(response => {
+				this.setState({singleDays: response.entity._embedded.singleDays});
+			});
+		}
+		  }, 5000);
 
 		const columns = [
 			{ title: 'Symbol', field: 'symbol' },
@@ -76,155 +97,79 @@ class SingleDayTable extends React.Component {
 			{ title: 'Volume', field: 'volume' }
 		  ];
 
-		  
-		  var temps = this.state.singleDays;
-		  var temp = temps.slice(0,100);
-		  /*
-		  temp = temp.filter(singleDay =>
-			  //tighter filter for quality control.
-			  singleDay.symbol === "BTCUSD" || "ETHUSD" || "USDCUSD" || "BNBUSD" || "BUSDUSD" || "XRPUSD" || "DOGEUSD" || "ADAUSD" || "MATICUSD" || "DAIUSD" || "DOTUSD" || "TRXUSD" || "LTCUSD" || "SHIBUSD" || "SOLUSD" || "XMRUSD"
-		  );
-		  */
-		  const datas = [];
-		  
-		  
-		  for (let i = 0; i < temp.length; i++ ) {
-			  if (temp[i].symbol == "BTCUSD" || "ETHUSD" || "USDCUSD" || "BNBUSD" || "BUSDUSD" || "XRPUSD" || "DOGEUSD" || "ADAUSD" || "MATICUSD" || "DAIUSD" || "DOTUSD" || "TRXUSD" || "LTCUSD" || "SHIBUSD" || "SOLUSD" || "XMRUSD" ) {
-			  datas[i] = {"symbol" : temp[i].symbol.slice(0,3),
-		  "priceChangePercent" : temp[i].priceChangePercent,
-		  "lastPrice" : temp[i].lastPrice,
-		  "volume" : temp[i].volume};
-			  //hashSet.add(temp[i].symbol.slice(0,3));
-		  }
-		}
+		  var filter = ["BTCUSD", "ETHUSD", "USDCUSD", "BNBUSD", "BUSDUSD", "DOGEUSD", "ADAUSD", "MATICUSD", "DAIUSD", "DOTUSD", "TRXUSD", "LTCUSD", "SHIBUSD", "SOLUSD", "XMRUSD", "BCHUSD", "QNTUSD"];
+		var temp = this.state.singleDays.filter(singleDay =>
+			filter.includes(singleDay.symbol)
+		);
 
+		const data = [];
 
-/*
-console.log(this.state.singleDays)
-console.log(this.props.singleDays)
-console.log(temp);
-console.log(temp.length)
-console.log(data.length);
-console.log(data);
-*/
+		for (let i = 0; i < temp.length; i++ ) {
+			data[i] = {"symbol" : temp[i].symbol.slice(0,3),
+"priceChangePercent" : temp[i].priceChangePercent,
+"lastPrice" : temp[i].lastPrice,
+"volume" : temp[i].volume};
+
+}
 
 		return (
+			<div className="lowercomponent">
+			<h1 className="headers">Trade</h1>
 			<div style={{ maxWidth: '100%' }}>
-			<MaterialTable  icons={tableIcons} columns={columns} data={datas} title='Most Popular - Click on item to Trade' />
+			<MaterialTable  icons={tableIcons} columns={columns} data={data} 
+			  title='Most Popular - Click on item to Trade' onRowClick={(event, rowData) => {
+				{this.toggleBuffer();
+				this.setState({openPopup: true,
+							   popUpData: rowData
+				})
+			}}}/>
 			</div>
-			//<SingleDaysList singleDays={this.state.singleDays} />
+			<CryptoDetails
+                title="Employee Form"
+                openPopup={this.state.openPopup}
+                setOpenPopup={this.setOpenPopup}
+				popUpData={popUpData}
+            >
+            </CryptoDetails>
+			</div>
 		)
 	}
 }
 
-/*
 
-class SingleDaysList extends React.Component{
+// class CryptoDetails extends React.Component{
+// 	constructor(props){
+//         super(props);
+//         this.state = {
+//             currentCrypto: this.props.currentCrypto,
+//         }
+//     }
 
-	constructor(props) {
-		super(props);
-		this.state = {searchInput : ''};
-	  }
-
-	onInputChange (event) {
-		event.preventDefault();
-        this.setState({searchInput: event.target.value})
-		if (searchInput.length > 0) {
-			temps.filter(x =>
-				x.symbol.includes(searchInput))
-		};
-    };
-
-
-	render() {
-
-		var temps = this.props.singleDays.filter(singleDay =>
-			singleDay.symbol.includes("USDT") == false
-		);
-
+// 	render() {
+// 		const {currentCrypto} = this.state;
 		
+// 		return (
+// 			<div>
+// 				<div className='rowA'><p>{currentCrypto.symbol}</p>
+// 				<TextField
+//           id="outlined-number"
+//           label="Quantity"
+//           type="number"
+//           InputLabelProps={{
+//             shrink: true,
+//           }}
+//         />
+// 					<ButtonGroup aria-label="outlined primary button group">
+// 						<Button>Buy</Button>
+// 						<Button>Sell</Button>
+// 					</ButtonGroup></div>
+// 					<div>
+// 					<object width="100%" height="500" data="https://en.wikipedia.org/wiki/Bitcoin" title="wikipedia">
+// </object>
+// 					</div>
+// 			</div>
+// 		)
+// 	}
+// }
 
-		const singleDays = temps.map(singleDay =>
-			<SingleDay key={singleDay._links.self.href} singleDay={singleDay}/>
-		);
-	
-
-		var temp = singleDays.slice(0,50);
-
-
-		return (
-			
-			<div>
-                    <div>
-                        <label>Global Search</label>
-                        <input 
-                            type="text" 
-							placeholder="Search here"
-                            defaultValue={this.state.searchInput} 
-                            onChange={this.onInputChange}
-                        />
-                    </div>
-				<table>
-					<tbody>
-						<tr>
-							<th>symbol</th>
-							<th>priceChangePercent</th>
-							<th>lastPrice</th>
-							<th>volume</th>
-							<th>action</th>
-						</tr>
-						{temp}
-					</tbody>
-				</table>
-				</div>
-		)
-	}
-}
-
-
-class SingleDay extends React.Component{
-	render() {
-		return (
-			<tr>
-				<td>{this.props.singleDay.symbol}</td>
-				<td>{this.props.singleDay.priceChangePercent}</td>
-				<td>{this.props.singleDay.lastPrice}</td>
-				<td>{this.props.singleDay.volume}</td>
-				<td><button onClick={console.log('You clicked submit.')}> Trade </button></td>
-			</tr>
-		)
-	}
-}
-*/
-
-/*
-class SearchSingleDay extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state =  {searchInput : ""};
-	}
-	render() {
-		const handleChange = (e) => {
-			e.preventDefault();
-			setSearchInput(e.target.value);
-		  };
-		  
-		  if (searchInput.length > 0) {
-			  temps.filter((x) => {
-			  return x.symbol.includes(searchInput);
-		  });
-		  }
-	<input
-	type="search"
-	placeholder="Search here"
-	onChange={handleChange}
-	value={this.state.searchInput} />
-	}
-}
-*/
-
-ReactDOM.render(
-	//<SearchSingleDay />,
-	<SingleDayTable />,
-	document.getElementById('singleday')
-)
+export default SingleDayTable

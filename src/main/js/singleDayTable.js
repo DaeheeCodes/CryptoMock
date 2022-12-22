@@ -1,6 +1,6 @@
 'use strict';
 import MaterialTable from 'material-table';
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { useState, useEffect } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -17,6 +17,13 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import { Button, ButtonGroup } from '@material-ui/core';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import CryptoDetails from './components/cryptoDetails';
+
+const client = require('./client');
+
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -39,30 +46,42 @@ const tableIcons = {
   };
 
 
-const React = require('react');
-const ReactDOM = require('react-dom');
-const template = require('rest/interceptor/template');
-const client = require('./client');
+export default function SingleDayTable() {
 
+	const [singleDays, setSingleDays] =useState([])
+	const [openPopup, setOpenPopup] = useState(false)
+	const [bufferOn, setBufferOn] = useState(true)
+	const [detailData, setDetailData] = useState([])
+	
+	const toggleBuffer = () => {
+			if (bufferOn)
+			{
+			setBufferOn(false)
+			}
+				if (bufferOn == false)
+			{
+				setBufferOn(true)
+			}
+				console.log(bufferOn)
+			};
 
-
-
-class SingleDayTable extends React.Component {
-
-	constructor(props) {
-		super(props);
-		this.state = {singleDays: []};
-	}
-
-	componentDidMount() {
-		setInterval(() => {
+				
+			useEffect (() => {
 			client({method: 'GET', path: '/api/singleDays'}).done(response => {
-				this.setState({singleDays: response.entity._embedded.singleDays});
+				setSingleDays(response.entity._embedded.singleDays);
 			});
-		  }, 5000);
-	}
+	});
 
-	render() {	
+	useEffect(() => {
+		setInterval(() => {
+			if(bufferOn) {
+			client({method: 'GET', path: '/api/singleDays'}).done(response => {
+				setSingleDays(response.entity._embedded.singleDays);
+			});
+		}
+		  }, 5000);
+		});
+
 		const columns = [
 			{ title: 'Symbol', field: 'symbol' },
 			{ title: 'Last Price', field: 'lastPrice', type:'currency', currencySetting:{ currencyCode:'USD', minimumFractionDigits:0, maximumFractionDigits:2} },
@@ -71,7 +90,7 @@ class SingleDayTable extends React.Component {
 		  ];
 
 		  var filter = ["BTCUSD", "ETHUSD", "USDCUSD", "BNBUSD", "BUSDUSD", "DOGEUSD", "ADAUSD", "MATICUSD", "DAIUSD", "DOTUSD", "TRXUSD", "LTCUSD", "SHIBUSD", "SOLUSD", "XMRUSD", "BCHUSD", "QNTUSD"];
-		var temp = this.state.singleDays.filter(singleDay =>
+		var temp = singleDays.filter(singleDay =>
 			filter.includes(singleDay.symbol)
 		);
 
@@ -86,32 +105,26 @@ class SingleDayTable extends React.Component {
 }
 
 		return (
+			<>
 			<div className="lowercomponent">
 			<h1 className="headers">Trade</h1>
 			<div style={{ maxWidth: '100%' }}>
-			<MaterialTable  icons={tableIcons} columns={columns} data={data} onRowClick={(event, rowData, togglePanel) => {
-				togglePanel()
-				console.log(rowData);
-				event.stopPropagation;
-			}}  detailPanel={rowData => {
-				return (
-					<div
-					style={{
-					  fontSize: 100,
-					  textAlign: 'center',
-					  color: 'white',
-					  backgroundColor: '#43A047',
-					}}
-				  >
-					{rowData.symbol}
-				  </div> )
-			  }}
-			  title='Most Popular - Click on item to Trade' />
+			<MaterialTable  icons={tableIcons} columns={columns} data={data} 
+			  title='Most Popular - Click on item to Trade' onRowClick={(event, rowData) => {
+				{toggleBuffer();
+				setOpenPopup(true);
+				setDetailData(rowData);
+			}}}/>
 			</div>
 			</div>
+			<CryptoDetails
+                title="Employee Form"
+                openPopup={openPopup}
+				detailData={detailData}
+            ></CryptoDetails>
+			</>
 		)
 	}
-}
 
 
-export default SingleDayTable
+
