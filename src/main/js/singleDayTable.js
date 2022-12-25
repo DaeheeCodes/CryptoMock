@@ -53,6 +53,26 @@ export default function SingleDayTable() {
 	const [bufferOn, setBufferOn] = useState(true)
 	const [detailData, setDetailData] = useState([])
 	
+	const keys = new Map([
+		["BTCUSD" , "Bitcoin"],
+		["ETHUSD" , "Ethereum"],
+		["USDCUSD" , "USD Coin"],
+		["BNBUSD" , "Binance#BNB"],
+		["BUSDUSD" , "Binance#BUSD"],
+		["DOGEUSD" , "Dogecoin"],
+		["ADAUSD" , "Cardano"],
+		["MATICUSD" , "Polygon_(blockchain)"],
+		["DAIUSD" , "Dai_(cryptocurrency)"],
+		["DOTUSD" , "Polkadot_(cryptocurrency)"],
+		["TRXUSD" , "Tron_(cryptocurrency)"],
+		["LTCUSD" , "Litecoin"],
+		["SHIBUSD" , "Shiba_Inu_(cryptocurrency)"],
+		["SOLUSD", "Solana_(blockchain_platform)"],
+		["XMRUSD" , "Monero"],
+		["BCHUSD" , "Bitcoin_Cash"],
+		["QNTUSD" , "Overledger"]
+	]);
+
 	const toggleBuffer = () => {
 			if (bufferOn)
 			{
@@ -94,14 +114,16 @@ export default function SingleDayTable() {
 			filter.includes(singleDay.symbol)
 		);
 
+		
 		const data = [];
 
 		for (let i = 0; i < temp.length; i++ ) {
 			data[i] = {"symbol" : temp[i].symbol.slice(0,3),
 "priceChangePercent" : temp[i].priceChangePercent,
 "lastPrice" : temp[i].lastPrice,
-"volume" : temp[i].volume};
-
+"volume" : temp[i].volume,
+"wiki" : keys.get(temp[i].symbol)
+};
 }
 
 		return (
@@ -111,7 +133,7 @@ export default function SingleDayTable() {
 			<div style={{ maxWidth: '100%' }}>
 			<MaterialTable  icons={tableIcons} columns={columns} data={data} 
 			  title='Most Popular - Click on item to Trade' onRowClick={(event, rowData) => {
-				{toggleBuffer();
+				{
 				setOpenPopup(true);
 				setDetailData(rowData);
 			}}}/>
@@ -121,6 +143,7 @@ export default function SingleDayTable() {
                 title="Employee Form"
                 openPopup={openPopup}
 				detailData={detailData}
+				setOpenPopup={setOpenPopup}
             ></CryptoDetails>
 			</>
 		)
