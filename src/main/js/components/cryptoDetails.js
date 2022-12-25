@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, DialogContent, makeStyles, Typography, DialogActio
 import { Title } from '@material-ui/icons';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@mui/material/TextField';
-import React, {useEffect, useState, Fragment,useCallback } from 'react';
+import React, {useEffect, useState, Fragment, useCallback } from 'react';
 
 const wiki = require('wikipedia');
 
@@ -69,7 +69,7 @@ export default function CryptoDetails(props) {
 						<Button>Buy</Button>
 						<Button>Sell</Button>
 					</ButtonGroup></div>
-            {wikiSummary}
+            {/* {wikiSummary} */}
 			</div>
             </DialogContent>
             <DialogActions>

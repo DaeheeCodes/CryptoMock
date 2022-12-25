@@ -21,6 +21,7 @@ import { Button, ButtonGroup } from '@material-ui/core';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import CryptoDetails from './components/cryptoDetails';
+import AuthService from "./services/auth.service";
 
 const client = require('./client');
 
@@ -52,7 +53,9 @@ export default function SingleDayTable() {
 	const [openPopup, setOpenPopup] = useState(false)
 	const [bufferOn, setBufferOn] = useState(true)
 	const [detailData, setDetailData] = useState([])
-	
+	const [currentUser, setCurrentUser] = useState([])
+	const [currentHoldings, setCurrentHoldings] = useState([])
+
 	const keys = new Map([
 		["BTCUSD" , "Bitcoin"],
 		["ETHUSD" , "Ethereum"],

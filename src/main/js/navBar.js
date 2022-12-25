@@ -1,5 +1,5 @@
 import React, { Component, useState  } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate  } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import AuthService from "./services/auth.service";
@@ -12,10 +12,14 @@ import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 
+
 // import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
 
 class NavBar extends Component {
+
+  
+
   constructor(props) {
     super(props);
     this.logOut = this.logOut.bind(this);
@@ -50,11 +54,6 @@ class NavBar extends Component {
 
   logOut() {
     AuthService.logout();
-    this.setState({
-      showModeratorBoard: false,
-      showAdminBoard: false,
-      currentUser: undefined,
-    });
   }
 
   render() {
@@ -106,7 +105,7 @@ class NavBar extends Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
+                <a href="/" className="nav-link" onClick={this.logOut}>
                   LogOut
                 </a>
               </li>
@@ -141,8 +140,6 @@ class NavBar extends Component {
             <Route path="/admin" element={<BoardAdmin />} />
           </Routes>
         </div>
-
-        {/* <AuthVerify logOut={this.logOut}/> */}
       </div>
     );
   }
