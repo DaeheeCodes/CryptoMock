@@ -4,6 +4,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@mui/material/TextField';
 import React, {useEffect, useState, Fragment, useCallback } from 'react';
 import { currentHoldingGetter, csvParse } from '../utils/tradeUtils';
+import AuthService from "../services/auth.service";
+import axios from 'axios';
+import authHeader from '../services/auth-header';
 const wiki = require('wikipedia');
 
 const useStyles = makeStyles(theme => ({
@@ -27,7 +30,8 @@ export default function CryptoDetails(props) {
 
     const getCurrentHoldings = useCallback(async () => {
         try {
-       setCurrentHoldings (currentHoldingGetter(csvParse(props.currentUser.history)));
+            let string = props.currentUser.history
+       setCurrentHoldings (currentHoldingGetter(csvParse(string.replace(/\\n/g,'\n'))));
     } catch (error) {
         //=> Typeof wikiError
     }
@@ -47,7 +51,10 @@ export default function CryptoDetails(props) {
     useEffect(() => {
         //retrieve wiki summary
         updateWikiData();
-        console.log(csvParse(currentUser.history));
+        if(currentUser.history?.length  > 0) {
+        console.log(csvParse(currentUser.history.replace(/\\n/g,'\n')));
+        console.log(currentHoldings);
+    }
         //stop inf loop and execute on prop change.
     }, [updateWikiData]);
 
@@ -55,8 +62,8 @@ export default function CryptoDetails(props) {
         if(currentUser.history?.length  > 0) {
 
             getCurrentHoldings();
-            console.log(currentHoldings);
-        }
+  
+                  }
     }, [getCurrentHoldings]);
 
     return (
@@ -64,16 +71,9 @@ export default function CryptoDetails(props) {
         <Dialog open={openPopup} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
             <DialogTitle className={classes.dialogTitle}>
                 <div style={{ display: 'flex' }}>
-                {currentUser.name?.length   ? (
-                <div>
-                 {currentHoldings[0]}
-                 </div>
-            ) :  (
             <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
                     {title}
                     </Typography>
-            )
-            }
                 </div>
             </DialogTitle>
             <DialogContent dividers>

@@ -71,7 +71,6 @@ public class UserDataController {
     if (authentication != null) {
 
       UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-      logger.info(userDetails.getId());
       String currentId = userDetails.getId();
       if (Objects.equals(id, currentId)) {
         if (userData.isPresent()) {
@@ -94,7 +93,7 @@ public class UserDataController {
   }
 
   @PostMapping("/userdata")
-  public ResponseEntity<UserData> createTutorial(@RequestBody UserData userdata) {
+  public ResponseEntity<UserData> createUserData(@RequestBody UserData userdata) {
     try {
       UserData _userdata = userDataRepo
           .save(new UserData(userdata.getUsername(), userdata.getName(), userdata.getEmail(), userdata.getPassword(),
@@ -106,19 +105,29 @@ public class UserDataController {
   }
 
   @PutMapping("/userdata/{id}")
-  public ResponseEntity<UserData> updateTutorial(@PathVariable("id") String id, @RequestBody UserData userdata) {
+  public ResponseEntity<UserData> updateUserData(@PathVariable("id") String id, @RequestBody UserData userdata,
+      Authentication authentication) {
     Optional<UserData> userData = userDataRepo.findById(id);
 
-    if (userData.isPresent()) {
-      UserData _userdata = userData.get();
-      _userdata.setName(userdata.getName());
-      _userdata.setEmail(userdata.getEmail());
-      _userdata.setHistory(userdata.getHistory());
-      _userdata.setCash(userdata.getCash());
-      return new ResponseEntity<>(userDataRepo.save(_userdata), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    if (authentication != null) {
+
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+      String currentId = userDetails.getId();
+      if (Objects.equals(id, currentId)) {
+        if (userData.isPresent()) {
+          UserData _userdata = userData.get();
+          _userdata.setName(userdata.getName());
+          _userdata.setEmail(userdata.getEmail());
+          _userdata.setHistory(userdata.getHistory());
+          _userdata.setCash(userdata.getCash());
+          return new ResponseEntity<>(userDataRepo.save(_userdata), HttpStatus.OK);
+        }
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
     }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
   }
 
   @DeleteMapping("/userdata/{id}")

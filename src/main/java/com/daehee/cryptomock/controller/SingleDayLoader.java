@@ -23,7 +23,7 @@ public class SingleDayLoader implements CommandLineRunner {
         this.repository = repository;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 3000)
     public void runs() throws Exception {
         this.repository.deleteAll();
 
