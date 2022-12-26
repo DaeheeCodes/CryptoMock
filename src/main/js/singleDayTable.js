@@ -1,7 +1,6 @@
 'use strict';
 import MaterialTable from 'material-table';
-import React, { forwardRef } from 'react';
-import { useState, useEffect } from 'react';
+import React, { forwardRef, useState, useEffect, useCallback } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -22,6 +21,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import CryptoDetails from './components/cryptoDetails';
 import AuthService from "./services/auth.service";
+import authService from './services/auth.service';
 
 const client = require('./client');
 
@@ -88,12 +88,27 @@ export default function SingleDayTable() {
 				console.log(bufferOn)
 			};
 
-				
+			// const updateCurrentUser = useCallback(async () => {
+			// 	try {
+			// 		const details = await authService.getCurrentUser();
+			// 		//Response of type @Page object
+			// 		setCurrentUser(details);
+			// 		//Response of type @wikiSummary - contains the intro and the main image
+			// 	} catch (error) {
+			// 		//=> Typeof wikiError
+			// 	}
+			// });
+
 			useEffect (() => {
+				const user =AuthService.getCurrentUser();
 			client({method: 'GET', path: '/api/singleDays'}).done(response => {
 				setSingleDays(response.entity._embedded.singleDays);
 			});
-	});
+			if (user) {
+			setCurrentUser(user);
+			}
+			// prevent loop on useEffect.
+	}, []);
 
 	useEffect(() => {
 		setInterval(() => {
@@ -143,9 +158,10 @@ export default function SingleDayTable() {
 			</div>
 			</div>
 			<CryptoDetails
-                title="Employee Form"
+                title="Trade Window"
                 openPopup={openPopup}
 				detailData={detailData}
+				currentUser={currentUser}
 				setOpenPopup={setOpenPopup}
             ></CryptoDetails>
 			</>
