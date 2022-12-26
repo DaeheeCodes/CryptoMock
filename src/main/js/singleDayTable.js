@@ -88,17 +88,6 @@ export default function SingleDayTable() {
 				console.log(bufferOn)
 			};
 
-			// const updateCurrentUser = useCallback(async () => {
-			// 	try {
-			// 		const details = await authService.getCurrentUser();
-			// 		//Response of type @Page object
-			// 		setCurrentUser(details);
-			// 		//Response of type @wikiSummary - contains the intro and the main image
-			// 	} catch (error) {
-			// 		//=> Typeof wikiError
-			// 	}
-			// });
-
 			useEffect (() => {
 				const user =AuthService.getCurrentUser();
 			client({method: 'GET', path: '/api/singleDays'}).done(response => {
@@ -140,7 +129,8 @@ export default function SingleDayTable() {
 "priceChangePercent" : temp[i].priceChangePercent,
 "lastPrice" : temp[i].lastPrice,
 "volume" : temp[i].volume,
-"wiki" : keys.get(temp[i].symbol)
+"wiki" : keys.get(temp[i].symbol),
+"fullSymbol" : temp[i].symbol
 };
 }
 

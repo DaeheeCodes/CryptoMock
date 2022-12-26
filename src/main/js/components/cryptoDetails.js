@@ -4,10 +4,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@mui/material/TextField';
 import React, {useEffect, useState, Fragment, useCallback } from 'react';
 import { currentHoldingGetter, csvParse } from '../utils/tradeUtils';
-import AuthService from "../services/auth.service";
+import UserService from "../services/user.service";
 import axios from 'axios';
 import authHeader from '../services/auth-header';
+
 const wiki = require('wikipedia');
+const API_URL = 'http://localhost:8080/api/userDatas/';
 
 const useStyles = makeStyles(theme => ({
     dialogWrapper: {
@@ -24,7 +26,8 @@ export default function CryptoDetails(props) {
 
     const [wikiSummary, setWikiSummary] =useState(null)
 	const [currentHoldings, setCurrentHoldings] = useState([])
-
+    const [executedTrade, setExecutedTrade] = useState([])
+    const [volumeRequested, setVolumeRequested] = useState('')
     const { title, children, detailData, openPopup, setOpenPopup,currentUser } = props;
     const classes = useStyles();
 
@@ -66,6 +69,35 @@ export default function CryptoDetails(props) {
                   }
     }, [getCurrentHoldings]);
 
+    const executeSale = () => {
+        var current = currentHoldings.get(detailData.fullSymbol)
+        if (current > volumeRequested) {
+                const tempCash = (current * detailData.price);
+                const cash = currentUser.cash + tempCash;
+                const added =  `${detailData.fullSymbol},SELL,${volumeRequested},${detailData.price},${cash},${Date.now()}\n`
+                UserService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, added, currentUser.cash)
+                console.log('trade executed')
+        }    
+        else {
+            console.log('insufficient holdings')
+        }
+    }
+
+
+    const executeBuy = ( ) => {
+        const current =  currentUser.cash
+        if (current > (volumeRequested * detailData.price)) {
+            current = current - (volumeRequested * detailData.price);
+            const added =  `${detailData.fullSymbol},BUY,${volumeRequested},${detailData.price},${current},${Date.now()}\n`
+            UserService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, added, currentUser.cash)
+            console.log('trade executed')
+        }
+        else {
+            console.log('insufficient funds')
+        }
+    }
+
+
     return (
 
         <Dialog open={openPopup} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
@@ -83,13 +115,14 @@ export default function CryptoDetails(props) {
           id="outlined-number"
           label="Quantity"
           type="number"
+          onChange ={e => setVolumeRequested(e.target.value)}
           InputLabelProps={{
             shrink: true,
           }}
         />
 					<ButtonGroup aria-label="outlined primary button group">
-						<Button>Buy</Button>
-						<Button>Sell</Button>
+						<Button onClick={()=>{executeBuy()}}>Buy</Button>
+						<Button onClick={()=>{executeSale()}}>Sell</Button>
 					</ButtonGroup></div>
             {wikiSummary} 
 		</div>
