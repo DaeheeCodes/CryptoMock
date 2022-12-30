@@ -137,7 +137,6 @@ function UserChart({ data, width, height }) {
           verticalAnchor: "middle"
         })}
       /> */}
-      
       <LinearGradient
         id="background-gradient"
         from={colors.darkAccent}
@@ -177,7 +176,7 @@ function UserChart({ data, width, height }) {
                             fill={colors.accent}
                             stroke={'white'}
                             strokeWidth={2} /> ) : null}
-                    <rect x={0} y={0} width={1000} height={500} onTouchStart={handleTooltip} fill={'transparent'}
+                    <rect x={0} y={0} width={innerWidth} height={innerHeight} onTouchStart={handleTooltip} fill={'transparent'}
                         onTouchMove={handleTooltip}
                         onMouseMove={handleTooltip}
                         onMouseLeave={() => hideTooltip()}
