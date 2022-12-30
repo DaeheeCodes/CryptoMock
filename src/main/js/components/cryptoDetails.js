@@ -134,13 +134,3 @@ export default function CryptoDetails(props) {
     )
 }
 
-/*
-            {currentUser.name?.length  > 0 ? (
-                <div>
-                 {currentUser.name}
-                 </div>
-            ) : (
-            <div>
-            {wikiSummary}
-            </div>)
-*/
