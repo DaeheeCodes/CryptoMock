@@ -1,11 +1,32 @@
-TODO
--Restrict views of other userdatas, only allow users to see/update api/userDatas/{id}.
--make history parser.
--history should be hash map of {date: { coin {
-                                              strike price
-                                           volume
-                                              sell or buy  }}}
+Dcoument formats needed
 
-- i then can use the date as the X axis and (volume*coin + cash at date) as Y axis.
 
--for iOS authentication
+current holdings
+   crypto: qt
+   cash: amt
+
+
+(
+historical holdings
+   date : {
+      crypto: qt
+      cash: amt
+   }
+
+compare holdingds
+   date: {
+      crypto: price
+   }
+) = calculates the daily ups and downs in graph
+
+onclick trade.
+
+check currenholdings crypto amt.
+   if amt covers it sell.
+   check cash
+   if cash covers it buy.
+   post to history via api
+
+
+
+Better manage login statefulness
