@@ -97,7 +97,7 @@ export default function SingleDayTable() {
 			setCurrentUser(user);
 			}
 			// prevent loop on useEffect.
-	}, []);
+	}, [singleDays]);
 
 	useEffect(() => {
 		setInterval(() => {
@@ -107,7 +107,7 @@ export default function SingleDayTable() {
 			});
 		}
 		  }, 5000);
-		});
+		}, []);
 
 		const columns = [
 			{ title: 'Symbol', field: 'symbol' },

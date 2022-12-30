@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,16 +31,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.daehee.cryptomock.model.UserData;
 import com.daehee.cryptomock.repo.UserDataRepo;
 import com.daehee.cryptomock.security.services.UserDetailsImpl;
+import com.daehee.cryptomock.payload.response.JwtResponse;
+import com.daehee.cryptomock.payload.response.MessageResponse;
+import com.daehee.cryptomock.security.jwt.JwtUtils;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/userDatas")
 public class UserDataController {
 
   private static final Logger logger = LoggerFactory.getLogger(UserDataController.class);
 
   @Autowired
   UserDataRepo userDataRepo;
+
+  @Autowired
+  JwtUtils jwtUtils;
+
+  @Autowired
+  AuthenticationManager authenticationManager;
 
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping("/userDatas")
@@ -104,7 +114,7 @@ public class UserDataController {
     }
   }
 
-  @PutMapping("/userdata/{id}")
+  @PostMapping("/userdata/{id}")
   public ResponseEntity<UserData> updateUserData(@PathVariable("id") String id, @RequestBody UserData userdata,
       Authentication authentication) {
     Optional<UserData> userData = userDataRepo.findById(id);
