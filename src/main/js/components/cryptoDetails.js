@@ -4,7 +4,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@mui/material/TextField';
 import React, {useEffect, useState, Fragment, useCallback } from 'react';
 import { currentHoldingGetter, csvParse } from '../utils/tradeUtils';
-import UserService from "../services/user.service";
+import TradeService from "../services/trade.service";
 import axios from 'axios';
 import authHeader from '../services/auth-header';
 
@@ -70,16 +70,18 @@ export default function CryptoDetails(props) {
     }, [getCurrentHoldings]);
 
     const executeSale = () => {
-        var current = currentHoldings.get(detailData.fullSymbol)
+        const current = currentHoldings.get(detailData.fullSymbol)
         if (current > volumeRequested) {
                 const tempCash = (current * detailData.price);
                 const cash = currentUser.cash + tempCash;
                 const added =  `${detailData.fullSymbol},SELL,${volumeRequested},${detailData.price},${cash},${Date.now()}\n`
-                UserService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, added, currentUser.cash)
+                TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, added, currentUser.cash)
                 console.log('trade executed')
+                console.log(currentHoldings);
         }    
         else {
             console.log('insufficient holdings')
+            console.log(currentHoldings);
         }
     }
 
@@ -89,11 +91,13 @@ export default function CryptoDetails(props) {
         if (current > (volumeRequested * detailData.price)) {
             current = current - (volumeRequested * detailData.price);
             const added =  `${detailData.fullSymbol},BUY,${volumeRequested},${detailData.price},${current},${Date.now()}\n`
-            UserService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, added, currentUser.cash)
+            TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, added, currentUser.cash)
             console.log('trade executed')
+            console.log(currentHoldings);
         }
         else {
             console.log('insufficient funds')
+            console.log(currentHoldings);
         }
     }
 
@@ -111,6 +115,9 @@ export default function CryptoDetails(props) {
             <DialogContent dividers>
             <div>
 				<div className='rowA'><p>{detailData.symbol}</p>
+                {currentHoldings.get(detailData.fullSymbol) ? (
+                    <p>{currentHoldings.get(detailData.fullSymbol)}</p>
+                ): (<p></p>) }
 				<TextField
           id="outlined-number"
           label="Quantity"
@@ -134,13 +141,3 @@ export default function CryptoDetails(props) {
     )
 }
 
-/*
-            {currentUser.name?.length  > 0 ? (
-                <div>
-                 {currentUser.name}
-                 </div>
-            ) : (
-            <div>
-            {wikiSummary}
-            </div>)
-*/
