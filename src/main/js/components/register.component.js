@@ -73,7 +73,7 @@ class Register extends Component {
       name: "",
       email: "",
       password: "",
-      history: "symbol,type,volume,price,cash,date\n",
+      history: "symbol,type,volume,price,cash,date*",
       cash: "",
       successful: false,
       message: ""

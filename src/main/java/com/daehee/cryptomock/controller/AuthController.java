@@ -70,6 +70,7 @@ public class AuthController {
 				userDetails.getUsername(),
 				userDetails.getName(),
 				userDetails.getEmail(),
+				userDetails.getPassword(),
 				userDetails.getHistory(),
 				userDetails.getCash(),
 				roles));

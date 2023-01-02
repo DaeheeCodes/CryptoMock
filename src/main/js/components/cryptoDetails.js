@@ -34,7 +34,7 @@ export default function CryptoDetails(props) {
     const getCurrentHoldings = useCallback(async () => {
         try {
             let string = props.currentUser.history
-       setCurrentHoldings (currentHoldingGetter(csvParse(string.replace(/\\n/g,'\n'))));
+       setCurrentHoldings (currentHoldingGetter(csvParse(currentUser.history)));
     } catch (error) {
     }
     }, [props.currentUser.history]);
@@ -46,7 +46,6 @@ export default function CryptoDetails(props) {
             setWikiSummary(page.extract);
             //Response of type @wikiSummary - contains the intro and the main image
         } catch (error) {
-            //=> Typeof wikiError
         }
     }, [props.detailData.wiki]);
 
@@ -54,7 +53,7 @@ export default function CryptoDetails(props) {
         //retrieve wiki summary
         updateWikiData();
         if(currentUser.history?.length  > 0) {
-        console.log(csvParse(currentUser.history.replace(/\\n/g,'\n')));
+        console.log(csvParse(currentUser.history));
         console.log(currentHoldings);
     }
         //stop inf loop and execute on prop change.
@@ -72,9 +71,11 @@ export default function CryptoDetails(props) {
         const current = currentHoldings.get(detailData.fullSymbol)
         if (current > volumeRequested) {
                 const tempCash = (current * detailData.lastPrice);
+                const tempHistory = currentUser.history;
                 const cash = currentUser.cash + tempCash;
                 const added =  `${detailData.fullSymbol},SELL,${volumeRequested},${detailData.lastPrice},${cash},${Date.now()}\n`
-                TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, added, currentUser.cash)
+                TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password,(tempHistory + added), currentUser.cash)
+                getCurrentHoldings();
                 console.log('trade executed')
                 console.log(currentHoldings);
         }    
@@ -86,11 +87,13 @@ export default function CryptoDetails(props) {
 
 
     const executeBuy = ( ) => {
-        const current =  currentUser.cash
+        var current =  currentUser.cash
+        const tempHistory = currentUser.history;
         if (current > (volumeRequested * detailData.lastPrice)) {
             current = current - (volumeRequested * detailData.lastPrice);
             const added =  `${detailData.fullSymbol},BUY,${volumeRequested},${detailData.lastPrice},${current},${Date.now()}\n`
-            TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, added, currentUser.cash)
+            TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, (tempHistory + added), currentUser.cash)
+            getCurrentHoldings();
             console.log('trade executed')
             console.log(currentHoldings);
         }
@@ -114,9 +117,9 @@ export default function CryptoDetails(props) {
             <DialogContent dividers>
             <div>
 				<div className='rowA'><p>{detailData.symbol}</p>
-                {/* {currentHoldings.get(detailData.fullSymbol) ? (
+                {(currentUser.history?.length  > 0)  ? (
                     <p>{currentHoldings.get(detailData.fullSymbol)}</p>
-                ): (<p></p>) } */}
+                ): (<p></p>) }
 				<TextField
           id="outlined-number"
           label="Quantity"

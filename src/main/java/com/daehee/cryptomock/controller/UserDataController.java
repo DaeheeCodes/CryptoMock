@@ -102,7 +102,7 @@ public class UserDataController {
 
   }
 
-  @PostMapping("/userdata")
+  @PostMapping("/userDatas")
   public ResponseEntity<UserData> createUserData(@RequestBody UserData userdata) {
     try {
       UserData _userdata = userDataRepo
@@ -114,7 +114,7 @@ public class UserDataController {
     }
   }
 
-  @PostMapping("/userdata/{id}")
+  @PutMapping("/userDatas/{id}")
   public ResponseEntity<UserData> updateUserData(@PathVariable("id") String id, @RequestBody UserData userdata,
       Authentication authentication) {
     Optional<UserData> userData = userDataRepo.findById(id);
@@ -126,11 +126,11 @@ public class UserDataController {
       if (Objects.equals(id, currentId)) {
         if (userData.isPresent()) {
           UserData _userdata = userData.get();
+          _userdata.setUsername(userdata.getUsername());
           _userdata.setName(userdata.getName());
           _userdata.setEmail(userdata.getEmail());
           _userdata.setHistory(userdata.getHistory());
           _userdata.setCash(userdata.getCash());
-          userDataRepo.save(_userdata);
           logger.info("success");
           return new ResponseEntity<>(userDataRepo.save(_userdata), HttpStatus.OK);
         }

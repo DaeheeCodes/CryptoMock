@@ -5,7 +5,7 @@ const API_URL = 'http://localhost:8080/api/userDatas/';
 
 class TradeService {
   updateUserData(id, username, name, email, password, history, cash) {
-    return axios.post(API_URL + id, {
+    return axios.put(API_URL + id, {
       id,
       username,
       name,
