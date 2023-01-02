@@ -130,13 +130,17 @@ public class UserDataController {
           _userdata.setEmail(userdata.getEmail());
           _userdata.setHistory(userdata.getHistory());
           _userdata.setCash(userdata.getCash());
+          userDataRepo.save(_userdata);
+          logger.info("success");
           return new ResponseEntity<>(userDataRepo.save(_userdata), HttpStatus.OK);
         }
       } else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        logger.info("invalid");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }
     }
-    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    logger.info("forbidden");
+    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
   }
 
