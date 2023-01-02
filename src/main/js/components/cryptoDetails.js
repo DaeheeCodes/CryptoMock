@@ -70,7 +70,7 @@ export default function CryptoDetails(props) {
     }, [getCurrentHoldings]);
 
     const executeSale = () => {
-        var current = currentHoldings.get(detailData.fullSymbol)
+        const current = currentHoldings.get(detailData.fullSymbol)
         if (current > volumeRequested) {
                 const tempCash = (current * detailData.price);
                 const cash = currentUser.cash + tempCash;
@@ -115,6 +115,9 @@ export default function CryptoDetails(props) {
             <DialogContent dividers>
             <div>
 				<div className='rowA'><p>{detailData.symbol}</p>
+                {currentHoldings.get(detailData.fullSymbol) ? (
+                    <p>{currentHoldings.get(detailData.fullSymbol)}</p>
+                ): (<p></p>) }
 				<TextField
           id="outlined-number"
           label="Quantity"
