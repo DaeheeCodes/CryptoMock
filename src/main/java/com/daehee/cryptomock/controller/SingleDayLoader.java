@@ -35,7 +35,7 @@ public class SingleDayLoader implements CommandLineRunner {
         // create ObjectMapper instance
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // read JSON file and convert to a customer object
+        // read JSON file and convert to a singleday object
         SingleDay singleDay[] = objectMapper.readValue(new URL("https://api.binance.us/api/v3/ticker/24hr"),
                 SingleDay[].class);
 

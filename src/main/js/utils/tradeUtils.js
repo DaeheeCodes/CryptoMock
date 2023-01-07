@@ -28,9 +28,9 @@ export  function currentHoldingGetter(data) {
   export  function csvParse(str, delimiter = ",") {
     //null value check for react.
   if (str) {
-    const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
+    const headers = str.slice(0, str.indexOf("*")).split(delimiter);
   
-    const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+    const rows = str.slice(str.indexOf("*") + 1).split("*");
   
     const arr = rows.map(function(row) {
       const values = row.split(delimiter);
@@ -46,3 +46,5 @@ export  function currentHoldingGetter(data) {
   }
   return null;
   }
+
+

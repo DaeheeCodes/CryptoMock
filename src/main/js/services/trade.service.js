@@ -17,6 +17,11 @@ class TradeService {
     { headers: authHeader() });
   }
 
+  getUserData(id) {
+    return axios.get(API_URL + id,
+    { headers: authHeader() });
+  }
+  
 }
 
 export default new TradeService();

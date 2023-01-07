@@ -28,7 +28,7 @@ export default function CryptoDetails(props) {
 	const [currentHoldings, setCurrentHoldings] = useState([])
     const [executedTrade, setExecutedTrade] = useState([])
     const [volumeRequested, setVolumeRequested] = useState('')
-    const { title, children, detailData, openPopup, setOpenPopup,currentUser } = props;
+    const { title, children, detailData, openPopup, setOpenPopup, currentUser, setCurrentUser } = props;
     const classes = useStyles();
 
     const getCurrentHoldings = useCallback(async () => {
@@ -75,12 +75,14 @@ export default function CryptoDetails(props) {
                 const cash = currentUser.cash + tempCash;
                 const added =  `${detailData.fullSymbol},SELL,${volumeRequested},${detailData.lastPrice},${cash},${Date.now()}\n`
                 TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password,(tempHistory + added), currentUser.cash)
+                const user = TradeService.getUserData(currentUser.id);
+                setCurrentUser(user);
                 getCurrentHoldings();
-                console.log('trade executed')
+                calert("Trade Executed")
                 console.log(currentHoldings);
         }    
         else {
-            console.log('insufficient holdings')
+            alert("Insufficent Holdings")
             console.log(currentHoldings);
         }
     }
@@ -93,12 +95,13 @@ export default function CryptoDetails(props) {
             current = current - (volumeRequested * detailData.lastPrice);
             const added =  `${detailData.fullSymbol},BUY,${volumeRequested},${detailData.lastPrice},${current},${Date.now()}\n`
             TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, (tempHistory + added), currentUser.cash)
+            setCurrentUser(user);
             getCurrentHoldings();
-            console.log('trade executed')
+            alert("Trade Executed")
             console.log(currentHoldings);
         }
         else {
-            console.log('insufficient funds')
+            alert("Insufficent Funds")
             console.log(currentHoldings);
         }
     }
@@ -117,9 +120,9 @@ export default function CryptoDetails(props) {
             <DialogContent dividers>
             <div>
 				<div className='rowA'><p>{detailData.symbol}</p>
-                {(currentUser.history?.length  > 0)  ? (
+                {/* {(currentUser.history?.length  > 10)  ? (
                     <p>{currentHoldings.get(detailData.fullSymbol)}</p>
-                ): (<p></p>) }
+                ): (<p></p>) } */}
 				<TextField
           id="outlined-number"
           label="Quantity"

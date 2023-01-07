@@ -129,6 +129,7 @@ public class UserDataController {
           _userdata.setUsername(userdata.getUsername());
           _userdata.setName(userdata.getName());
           _userdata.setEmail(userdata.getEmail());
+          _userdata.setPassword(userdata.getPassword());
           _userdata.setHistory(userdata.getHistory());
           _userdata.setCash(userdata.getCash());
           logger.info("success");

@@ -36,6 +36,9 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
   }
+  update() {
+    
+  }
 }
 
 export default new AuthService();

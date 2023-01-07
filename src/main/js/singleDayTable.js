@@ -152,6 +152,7 @@ export default function SingleDayTable() {
                 openPopup={openPopup}
 				detailData={detailData}
 				currentUser={currentUser}
+				setCurrentUser={setCurrentUser}
 				setOpenPopup={setOpenPopup}
             ></CryptoDetails>
 			</>
