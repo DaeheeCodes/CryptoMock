@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Navigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
+import TradeService from "../services/trade.service";
 
 export default class Profile extends Component {
   constructor(props) {
@@ -9,7 +10,8 @@ export default class Profile extends Component {
     this.state = {
       redirect: null,
       userReady: false,
-      currentUser: { username: "" }
+      currentUser: { username: "" },
+      currentHoldings: []
     };
   }
 
@@ -25,6 +27,8 @@ export default class Profile extends Component {
       return <Navigate to={this.state.redirect} />
     }
 
+    
+
     const { currentUser } = this.state;
 
     return (
@@ -37,18 +41,18 @@ export default class Profile extends Component {
           </h3>
         </header>
         <p>
-          <strong>Token:</strong>{" "}
-          {currentUser.accessToken.substring(0, 20)} ...{" "}
-          {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
+          <strong>Cash:</strong>{" "}
+          {currentUser.cash}
         </p>
         <p>
-          <strong>Id:</strong>{" "}
+          <strong>Holdings:</strong>{" "}
           {currentUser.id}
         </p>
         <p>
           <strong>Email:</strong>{" "}
           {currentUser.email}
         </p>
+        {/* transaction history table */}
         <strong>Authorities:</strong>
         <ul>
           {currentUser.roles &&

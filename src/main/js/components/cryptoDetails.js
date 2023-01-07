@@ -95,6 +95,7 @@ export default function CryptoDetails(props) {
             current = current - (volumeRequested * detailData.lastPrice);
             const added =  `${detailData.fullSymbol},BUY,${volumeRequested},${detailData.lastPrice},${current},${Date.now()}\n`
             TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, (tempHistory + added), currentUser.cash)
+            const user = TradeService.getUserData(currentUser.id);
             setCurrentUser(user);
             getCurrentHoldings();
             alert("Trade Executed")

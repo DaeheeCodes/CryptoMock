@@ -21,7 +21,6 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import CryptoDetails from './components/cryptoDetails';
 import AuthService from "./services/auth.service";
-import authService from './services/auth.service';
 
 const client = require('./client');
 
