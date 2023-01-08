@@ -81,19 +81,19 @@ export default class Profile extends Component {
 
     const { currentUser } = this.state;
 
-    const transactionHistory =  (csvParse(currentUser.history));
+    const transactionHistory =  csvParse(currentUser.history);
     const data = [];
-
+if (transactionHistory) {
     for (let i = 0; i < transactionHistory.length; i++ ) {
      data[i] = {"symbol" : transactionHistory[i].symbol.slice(0,3),
 "type" : transactionHistory[i].type,
 "volume" : transactionHistory[i].volume,
 "price" :transactionHistory[i].price,
 "cash" : transactionHistory[i].cash,
-"data" : transactionHistory[i].data
-};
+"data" : (new Date(parseInt(transactionHistory[i].data))).toString()
 }
-  
+}
+};
     return (
       <div className="container profile-container">
         {(this.state.userReady) ?
