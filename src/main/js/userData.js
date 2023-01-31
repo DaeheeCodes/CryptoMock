@@ -5,6 +5,7 @@ import authHeader from './services/auth-header';
 import UserChart from './components/userChart';
 import ParentSize from '@visx/responsive/lib/components/ParentSize';
 import { data } from './data/stats_for_Denmark';
+import { currentAssetGetter, currentHoldingGetter, csvParse } from "./utils/tradeUtils";
 
 const React = require('react');
 const ReactDOM = require('react-dom'); 
@@ -20,7 +21,9 @@ class UserData extends React.Component {
 		this.state = {userDatas: [],
 			redirect: null,
 			userReady: false,
-			currentUser: { username: "" }
+			currentUser: { username: "" },
+			currentHoldings: [],
+			singleDays: []
 		};
 	}
     
@@ -28,7 +31,9 @@ class UserData extends React.Component {
 	componentDidMount() { 
 		setInterval(() => {
 		const currentUser = AuthService.getCurrentUser();
-
+		client({method: 'GET', path: '/api/singleDays'}).done(response => {
+			this.setState({singleDays: response.entity._embedded.singleDays});
+		});
 
 		if (currentUser) {
 		this.setState({ currentUser: currentUser, userReady: true })
@@ -46,12 +51,17 @@ class UserData extends React.Component {
 
 	render() { 
 
-		
+    	const currentHoldings = currentHoldingGetter(csvParse(this.state.currentUser.history))
+		const currentAssets = currentAssetGetter(currentHoldings, this.state.singleDays);
+		const total = (parseInt(this.state.currentUser.cash) + parseInt(currentAssets))
 
 		return (
 			<div className="lowercomponent">
 			<h1 className="headers">My standing</h1>
-			<UserChart data={data} width={800} height={400}/>
+			<div>
+			<h5>Total Standing: ${total} Current Cash: ${this.state.currentUser.cash} Current Assets: ${currentAssets}</h5>
+			</div>
+			<UserChart data={data} width={800} height={250}/>
 			</div>
 		)
 	}

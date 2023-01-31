@@ -1,6 +1,5 @@
-import { Dialog, DialogTitle, DialogContent, makeStyles, Typography, DialogActions, ButtonGroup, Button } from '@material-ui/core';
-import { Title } from '@material-ui/icons';
-import CloseIcon from '@material-ui/icons/Close';
+import { Dialog, DialogTitle, DialogContent, Typography, DialogActions, ButtonGroup, Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import TextField from '@mui/material/TextField';
 import React, {useEffect, useState, Fragment, useCallback } from 'react';
 import { currentHoldingGetter, csvParse } from '../utils/tradeUtils';
@@ -11,17 +10,6 @@ import authHeader from '../services/auth-header';
 const wiki = require('wikipedia');
 const API_URL = 'http://localhost:8080/api/userDatas/';
 
-const useStyles = makeStyles(theme => ({
-    dialogWrapper: {
-        padding: theme.spacing(2),
-        position: 'absolute',
-        top: theme.spacing(5)
-    },
-    dialogTitle: {
-        paddingRight: '0px'
-    }
-}))
-
 export default function CryptoDetails(props) {
 
     const [wikiSummary, setWikiSummary] =useState(null)
@@ -29,7 +17,6 @@ export default function CryptoDetails(props) {
     const [executedTrade, setExecutedTrade] = useState([])
     const [volumeRequested, setVolumeRequested] = useState('')
     const { title, children, detailData, openPopup, setOpenPopup, currentUser, setCurrentUser } = props;
-    const classes = useStyles();
 
     const getCurrentHoldings = useCallback(async () => {
         try {
@@ -72,13 +59,13 @@ export default function CryptoDetails(props) {
         if (current > volumeRequested) {
                 const tempCash = (current * detailData.lastPrice);
                 const tempHistory = currentUser.history;
-                const cash = currentUser.cash + tempCash;
-                const added =  `${detailData.fullSymbol},SELL,${volumeRequested},${detailData.lastPrice},${cash},${Date.now()}\n`
-                TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password,(tempHistory + added), currentUser.cash)
+                const cash = parseInt(currentUser.cash) + parseInt(tempCash);
+                const added =  `*${detailData.fullSymbol},SELL,${volumeRequested},${detailData.lastPrice},${cash},${Date.now()}\n`
+                TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password,(tempHistory + added), cash)
                 const user = TradeService.getUserData(currentUser.id);
                 setCurrentUser(user);
                 getCurrentHoldings();
-                calert("Trade Executed")
+                alert("Trade Executed")
                 console.log(currentHoldings);
         }    
         else {
@@ -90,11 +77,11 @@ export default function CryptoDetails(props) {
 
     const executeBuy = ( ) => {
         var current =  currentUser.cash
-        const tempHistory = currentUser.history;
         if (current > (volumeRequested * detailData.lastPrice)) {
+            const tempHistory = currentUser.history;
             current = current - (volumeRequested * detailData.lastPrice);
-            const added =  `${detailData.fullSymbol},BUY,${volumeRequested},${detailData.lastPrice},${current},${Date.now()}\n`
-            TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, (tempHistory + added), currentUser.cash)
+            const added =  `*${detailData.fullSymbol},BUY,${volumeRequested},${detailData.lastPrice},${current},${Date.now()}\n`
+            TradeService.updateUserData(currentUser.id, currentUser.username, currentUser.name, currentUser.email, currentUser.password, (tempHistory + added), current)
             const user = TradeService.getUserData(currentUser.id);
             setCurrentUser(user);
             getCurrentHoldings();
@@ -110,8 +97,8 @@ export default function CryptoDetails(props) {
 
     return (
 
-        <Dialog open={openPopup} maxWidth="md" classes={{ paper: classes.dialogWrapper }}>
-            <DialogTitle className={classes.dialogTitle}>
+        <Dialog open={openPopup} maxWidth="md">
+            <DialogTitle >
                 <div style={{ display: 'flex' }}>
             <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
                     {title}

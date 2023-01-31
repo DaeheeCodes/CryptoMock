@@ -111,7 +111,7 @@ function UserChart({ data, width, height }) {
         }} rx={14} />
                 <Group left={margin.left} top={margin.top}>
                    
-        <AxisLeft
+        {/* <AxisLeft
       hideZero
                         scale={rdScale}
                         stroke={colors.darkGray}
@@ -123,7 +123,7 @@ function UserChart({ data, width, height }) {
           verticalAnchor: "middle"
         })}
         tickFormat={(value) => `$${value}`}
-      />
+      /> */}
 
                     {/* <AxisBottom
                         scale={timeScale}
@@ -190,7 +190,7 @@ function UserChart({ data, width, height }) {
                     left={tooltipLeft}
                     style={tooltipStyles}
                 > 
-                <p>{`Total Spend: $${getRD(tooltipData[1])}`}</p>
+                <p>{`Total holdings: $${getRD(tooltipData[1])}`}</p>
                 <p>{`Year: ${getDate(tooltipData[1])}`}</p>
                 </TooltipWithBounds>
             ) : null}

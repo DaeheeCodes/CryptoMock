@@ -24,9 +24,10 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
+    "@material-table/core": "^0.2.62",
+    "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.10.17",
+    "@mui/styles": "^5.11.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
     "@testing-library/user-event": "^14.1.1",
@@ -50,7 +51,6 @@
     "d3-time-format": "^4.1.0",
     "date-fns": "^2.0.0-alpha.27",
     "framer-motion": "^4.1.17",
-    "material-table": "^1.69.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^5.3.4",
@@ -65,6 +65,7 @@
     "wikipedia": "^2.0.0"
   },
   "scripts": {
+    "start": "react-scripts start",
     "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
   },
   "devDependencies": {
@@ -73,7 +74,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.2",
     "css-loader": "^5.2.7",
-    "sass-loader": "^13.2.0",
+    "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
     "webpack": "^4.19.1",
     "webpack-cli": "^4.0.0"
