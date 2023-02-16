@@ -1,12 +1,9 @@
-# fly.toml file generated for cryptomock on 2023-01-30T08:52:27-08:00
+# fly.toml file generated for cryptomock on 2023-01-31T01:44:25-08:00
 
 app = "cryptomock"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
-
-[build]
-  builder = "heroku/buildpacks:20"
 
 [env]
   PORT = "8080"
