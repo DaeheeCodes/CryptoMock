@@ -1,0 +1,27 @@
+version: '3'
+services:
+
+  cryptomock-back-end:
+    image: "cryptomock"
+    container_name: cryptomock-back-end
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING.PROFILES.ACTIVE=default
+    env_file: .env
+
+  cryptomock-front-end:
+    image: "cryptomock-ui"
+    container_name: cryptomock-front-end
+    ports:
+      - "3000:3000"
+    links:
+      - cryptomock-back-end
+    env_file: .env
+
+  mongo_db:
+    image: "mongo"
+    restart: always
+    ports:
+      - 27017:27017
+    env_file: .env
