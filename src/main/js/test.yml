@@ -8,7 +8,6 @@ services:
       - "8080:8080"
     environment:
       - SPRING.PROFILES.ACTIVE=default
-    env_file: .env
 
   cryptomock-front-end:
     image: "cryptomock-ui"
