@@ -3,9 +3,9 @@ jobs:
   build:
     docker:
       - image: hwk613/cryptomock:0.0.1
-    auth:
-          username: hwk613
-          password: $DOCKER_HUB_PWD
+        auth:
+              username: hwk613
+              password: $DOCKER_HUB_PWD
     
     steps:
       - checkout
