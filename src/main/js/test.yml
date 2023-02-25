@@ -8,6 +8,7 @@ services:
       - "8080:8080"
     environment:
       - SPRING.PROFILES.ACTIVE=default
+    env_file: .env
 
   cryptomock-front-end:
     image: "cryptomock-ui"
@@ -16,9 +17,11 @@ services:
       - "3000:3000"
     links:
       - cryptomock-back-end
+    env_file: .env
 
   mongo_db:
     image: "mongo"
     restart: always
     ports:
       - 27017:27017
+    env_file: .env
