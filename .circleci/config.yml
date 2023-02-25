@@ -33,5 +33,5 @@ jobs:
             docker login -e $DOCKER_HUB_EMAIL -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
             docker tag cryptomock_circleci $DOCKER_HUB_USER_ID/cryptomock:$CIRCLE_SHA1
             docker tag cryptomock_circleci $DOCKER_HUB_USER_ID/cryptomock:latest
-            docker push $DOCKER_HUB_USER_ID/dockerapp1:$CIRCLE_SHA1
-            docker push $DOCKER_HUB_USER_ID/dockerapp1:latest
+            docker push $DOCKER_HUB_USER_ID/cryptomock:$CIRCLE_SHA1
+            docker push $DOCKER_HUB_USER_ID/cryptomock:latest
