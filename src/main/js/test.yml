@@ -24,3 +24,79 @@ services:
     ports:
       - 27017:27017
     env_file: .env
+
+
+version: 2.1
+jobs:
+  test_ci:
+    docker:
+      - image: docker:17.05.0-ce-git
+    resource_class: small
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 20.10.12
+
+      - run:
+          name: Download and install docker compose
+          command: |
+            apk update && apk upgrade && apk add curl  
+            curl -L "https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-linux-x86_64" -o ~/docker-compose  
+            chmod +x ~/docker-compose  
+            mv ~/docker-compose /usr/local/bin/docker-compose
+
+      - run:
+          name: Build test image
+          command: |
+            docker build -t tests .
+
+      - run:
+          name: Spin up database
+          command: |
+            docker-compose down -v   
+            docker-compose up -d
+
+      - run:
+          name: prepare database
+          command: |
+            while ! docker exec database mysql -e 'select 1=1' -proot test_db; do  
+              echo "waiting for database"  
+              sleep 2  
+            done  
+            docker cp test/resources/init.sql database:/init.sql  
+            docker exec database mysql -e 'source /init.sql' -proot test_db
+
+      - run:
+          name: testing
+          command: |
+            docker run --network container:database tests clj -M:circle-ci-test  
+
+      - run:
+          name: tear-down
+          command: |
+            docker-compose down -v
+
+
+workflows:
+  version: 2
+  ci_tests:
+    jobs:
+      - test-circle-ci:
+          filters:
+            branches:
+              ignore: master
+
+  test-deploy:
+    jobs:
+      - test_ci:
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - test_ci
+          filters:
+            branches:
+              only: master
