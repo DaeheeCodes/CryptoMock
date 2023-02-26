@@ -5,3 +5,4 @@ pack build ghcr.io/DaeheeCodes/cryptomock:latest \
     --env "BP_JVM_VERSION=17" \
     --publish
     
+    d
