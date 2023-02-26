@@ -26,7 +26,7 @@ docker push hwk613/mongo:latest
 docker tag 3c25fa139f20 registry.heroku.com/cryptomock/frontend
 docker push registry.heroku.com/cryptomock/frontend
 
-docker tag dc30d88c358e registry.heroku.com/cryptomock/web
+docker tag cf21f6b66348 registry.heroku.com/cryptomock/web
 docker push registry.heroku.com/cryptomock/web
 
 docker tag a440572ac3c1 registry.heroku.com/cryptomock/mongo
