@@ -15,7 +15,7 @@ docker-compose up
 
 docker hub
 
-docker tag 6b311b19d982 hwk613/cryptomock-ui:latest
+docker tag 3c25fa139f20 hwk613/cryptomock-ui:latest
 docker tag c995e58dff38 hwk613/cryptomock:latest
 docker tag a440572ac3c1 hwk613/mongo:latest
 docker push hwk613/cryptomock-ui:latest
@@ -23,11 +23,11 @@ docker push hwk613/cryptomock:latest
 docker push hwk613/mongo:latest
 
 
-docker tag 6b311b19d982 registry.heroku.com/cryptomock/frontend
+docker tag 3c25fa139f20 registry.heroku.com/cryptomock/frontend
 docker push registry.heroku.com/cryptomock/frontend
 
-docker tag dc30d88c358e registry.heroku.com/cryptomock/backend
-docker push registry.heroku.com/cryptomock/backend
+docker tag dc30d88c358e registry.heroku.com/cryptomock/web
+docker push registry.heroku.com/cryptomock/web
 
 docker tag a440572ac3c1 registry.heroku.com/cryptomock/mongo
 docker push registry.heroku.com/cryptomock/mongo
