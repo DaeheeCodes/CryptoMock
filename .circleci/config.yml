@@ -35,7 +35,7 @@ jobs:
           name: Start container and verify it's working
           command: |
             set -x
-            docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+            docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
             docker-compose up -d
 
 
